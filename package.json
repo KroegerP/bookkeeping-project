@@ -1,0 +1,42 @@
+{
+  "name": "bookkeeping-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "pkroeger <peter14mail@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "prepare": "husky install",
+    "postinstall": "run-s install:*",
+    "compile": "run-s compile:client compile:server",
+    "compile:client": "cd client && yarn compile",
+    "compile:server": "cd server && yarn compile",
+    "build": "run-p build:client build:server",
+    "build:client": "cd client && yarn build",
+    "build:server": "cd server && yarn build",
+    "dev": "run-p dev:client dev:server",
+    "dev:client": "cd client && yarn dev",
+    "dev:server": "cd server && yarn dev",
+    "generate": "run-p generate:*",
+    "generate:server": "yarn generate:graphql",
+    "generate:client": "cd client && yarn generate",
+    "generate:graphql": "cd graphql && yarn generate",
+    "install:client": "cd client && yarn install",
+    "install:graphql": "cd graphql && yarn install",
+    "install:server": "cd server && yarn install",
+    "lint": "run-p lint:client lint:server",
+    "lint:client": "cd client && yarn lint",
+    "lint:server": "cd server && yarn lint",
+    "test": "npm-run-all generate:graphql --parallel test:client test:server",
+    "test:local": "npm-run-all build:server generate:graphql --parallel test:client-local test:server",
+    "test:client": "cd client && yarn test",
+    "test:client-local": "cd client && yarn test:local",
+    "test:server": "cd server && yarn test"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.16.0",
+    "@typescript-eslint/parser": "^6.16.0",
+    "eslint": "^8.56.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.3.3"
+  }
+}
