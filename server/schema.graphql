@@ -6,8 +6,6 @@ type User {
   name: String
   email: String
   password: PasswordState
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  postsCount(where: PostWhereInput! = {}): Int
   createdAt: DateTime
 }
 
@@ -29,7 +27,6 @@ input UserWhereInput {
   id: IDFilter
   name: StringFilter
   email: StringFilter
-  posts: PostManyRelationFilter
   createdAt: DateTimeNullableFilter
 }
 
@@ -78,12 +75,6 @@ input NestedStringFilter {
   not: NestedStringFilter
 }
 
-input PostManyRelationFilter {
-  every: PostWhereInput
-  some: PostWhereInput
-  none: PostWhereInput
-}
-
 input DateTimeNullableFilter {
   equals: DateTime
   in: [DateTime!]
@@ -111,15 +102,7 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
-  posts: PostRelateToManyForUpdateInput
   createdAt: DateTime
-}
-
-input PostRelateToManyForUpdateInput {
-  disconnect: [PostWhereUniqueInput!]
-  set: [PostWhereUniqueInput!]
-  create: [PostCreateInput!]
-  connect: [PostWhereUniqueInput!]
 }
 
 input UserUpdateArgs {
@@ -131,133 +114,7 @@ input UserCreateInput {
   name: String
   email: String
   password: String
-  posts: PostRelateToManyForCreateInput
   createdAt: DateTime
-}
-
-input PostRelateToManyForCreateInput {
-  create: [PostCreateInput!]
-  connect: [PostWhereUniqueInput!]
-}
-
-type Post {
-  id: ID!
-  title: String
-  content: Post_content_Document
-  author: User
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
-  tagsCount(where: TagWhereInput! = {}): Int
-}
-
-type Post_content_Document {
-  document(hydrateRelationships: Boolean! = false): JSON!
-}
-
-input PostWhereUniqueInput {
-  id: ID
-}
-
-input PostWhereInput {
-  AND: [PostWhereInput!]
-  OR: [PostWhereInput!]
-  NOT: [PostWhereInput!]
-  id: IDFilter
-  title: StringFilter
-  author: UserWhereInput
-  tags: TagManyRelationFilter
-}
-
-input TagManyRelationFilter {
-  every: TagWhereInput
-  some: TagWhereInput
-  none: TagWhereInput
-}
-
-input PostOrderByInput {
-  id: OrderDirection
-  title: OrderDirection
-}
-
-input PostUpdateInput {
-  title: String
-  content: JSON
-  author: UserRelateToOneForUpdateInput
-  tags: TagRelateToManyForUpdateInput
-}
-
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-}
-
-input TagRelateToManyForUpdateInput {
-  disconnect: [TagWhereUniqueInput!]
-  set: [TagWhereUniqueInput!]
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
-}
-
-input PostUpdateArgs {
-  where: PostWhereUniqueInput!
-  data: PostUpdateInput!
-}
-
-input PostCreateInput {
-  title: String
-  content: JSON
-  author: UserRelateToOneForCreateInput
-  tags: TagRelateToManyForCreateInput
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-}
-
-input TagRelateToManyForCreateInput {
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
-}
-
-type Tag {
-  id: ID!
-  name: String
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  postsCount(where: PostWhereInput! = {}): Int
-}
-
-input TagWhereUniqueInput {
-  id: ID
-}
-
-input TagWhereInput {
-  AND: [TagWhereInput!]
-  OR: [TagWhereInput!]
-  NOT: [TagWhereInput!]
-  id: IDFilter
-  name: StringFilter
-  posts: PostManyRelationFilter
-}
-
-input TagOrderByInput {
-  id: OrderDirection
-  name: OrderDirection
-}
-
-input TagUpdateInput {
-  name: String
-  posts: PostRelateToManyForUpdateInput
-}
-
-input TagUpdateArgs {
-  where: TagWhereUniqueInput!
-  data: TagUpdateInput!
-}
-
-input TagCreateInput {
-  name: String
-  posts: PostRelateToManyForCreateInput
 }
 
 type Purchase {
@@ -265,6 +122,7 @@ type Purchase {
   date: DateTime
   description: String
   cost: Float
+  category: Category
   createdAt: DateTime
 }
 
@@ -280,6 +138,7 @@ input PurchaseWhereInput {
   date: DateTimeFilter
   description: StringFilter
   cost: FloatFilter
+  category: CategoryWhereInput
   createdAt: DateTimeNullableFilter
 }
 
@@ -317,7 +176,14 @@ input PurchaseUpdateInput {
   date: DateTime
   description: String
   cost: Float
+  category: CategoryRelateToOneForUpdateInput
   createdAt: DateTime
+}
+
+input CategoryRelateToOneForUpdateInput {
+  create: CategoryCreateInput
+  connect: CategoryWhereUniqueInput
+  disconnect: Boolean
 }
 
 input PurchaseUpdateArgs {
@@ -329,43 +195,72 @@ input PurchaseCreateInput {
   date: DateTime
   description: String
   cost: Float
+  category: CategoryRelateToOneForCreateInput
   createdAt: DateTime
 }
 
-type Caretgory {
-  id: ID!
-  name: String
+input CategoryRelateToOneForCreateInput {
+  create: CategoryCreateInput
+  connect: CategoryWhereUniqueInput
 }
 
-input CaretgoryWhereUniqueInput {
+type Category {
+  id: ID!
+  name: String
+  purchases(where: PurchaseWhereInput! = {}, orderBy: [PurchaseOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PurchaseWhereUniqueInput): [Purchase!]
+  purchasesCount(where: PurchaseWhereInput! = {}): Int
+}
+
+input CategoryWhereUniqueInput {
   id: ID
   name: String
 }
 
-input CaretgoryWhereInput {
-  AND: [CaretgoryWhereInput!]
-  OR: [CaretgoryWhereInput!]
-  NOT: [CaretgoryWhereInput!]
+input CategoryWhereInput {
+  AND: [CategoryWhereInput!]
+  OR: [CategoryWhereInput!]
+  NOT: [CategoryWhereInput!]
   id: IDFilter
   name: StringFilter
+  purchases: PurchaseManyRelationFilter
 }
 
-input CaretgoryOrderByInput {
+input PurchaseManyRelationFilter {
+  every: PurchaseWhereInput
+  some: PurchaseWhereInput
+  none: PurchaseWhereInput
+}
+
+input CategoryOrderByInput {
   id: OrderDirection
   name: OrderDirection
 }
 
-input CaretgoryUpdateInput {
+input CategoryUpdateInput {
   name: String
+  purchases: PurchaseRelateToManyForUpdateInput
 }
 
-input CaretgoryUpdateArgs {
-  where: CaretgoryWhereUniqueInput!
-  data: CaretgoryUpdateInput!
+input PurchaseRelateToManyForUpdateInput {
+  disconnect: [PurchaseWhereUniqueInput!]
+  set: [PurchaseWhereUniqueInput!]
+  create: [PurchaseCreateInput!]
+  connect: [PurchaseWhereUniqueInput!]
 }
 
-input CaretgoryCreateInput {
+input CategoryUpdateArgs {
+  where: CategoryWhereUniqueInput!
+  data: CategoryUpdateInput!
+}
+
+input CategoryCreateInput {
   name: String
+  purchases: PurchaseRelateToManyForCreateInput
+}
+
+input PurchaseRelateToManyForCreateInput {
+  create: [PurchaseCreateInput!]
+  connect: [PurchaseWhereUniqueInput!]
 }
 
 """
@@ -380,30 +275,18 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
-  createPost(data: PostCreateInput!): Post
-  createPosts(data: [PostCreateInput!]!): [Post]
-  updatePost(where: PostWhereUniqueInput!, data: PostUpdateInput!): Post
-  updatePosts(data: [PostUpdateArgs!]!): [Post]
-  deletePost(where: PostWhereUniqueInput!): Post
-  deletePosts(where: [PostWhereUniqueInput!]!): [Post]
-  createTag(data: TagCreateInput!): Tag
-  createTags(data: [TagCreateInput!]!): [Tag]
-  updateTag(where: TagWhereUniqueInput!, data: TagUpdateInput!): Tag
-  updateTags(data: [TagUpdateArgs!]!): [Tag]
-  deleteTag(where: TagWhereUniqueInput!): Tag
-  deleteTags(where: [TagWhereUniqueInput!]!): [Tag]
   createPurchase(data: PurchaseCreateInput!): Purchase
   createPurchases(data: [PurchaseCreateInput!]!): [Purchase]
   updatePurchase(where: PurchaseWhereUniqueInput!, data: PurchaseUpdateInput!): Purchase
   updatePurchases(data: [PurchaseUpdateArgs!]!): [Purchase]
   deletePurchase(where: PurchaseWhereUniqueInput!): Purchase
   deletePurchases(where: [PurchaseWhereUniqueInput!]!): [Purchase]
-  createCaretgory(data: CaretgoryCreateInput!): Caretgory
-  createCaretgories(data: [CaretgoryCreateInput!]!): [Caretgory]
-  updateCaretgory(where: CaretgoryWhereUniqueInput!, data: CaretgoryUpdateInput!): Caretgory
-  updateCaretgories(data: [CaretgoryUpdateArgs!]!): [Caretgory]
-  deleteCaretgory(where: CaretgoryWhereUniqueInput!): Caretgory
-  deleteCaretgories(where: [CaretgoryWhereUniqueInput!]!): [Caretgory]
+  createCategory(data: CategoryCreateInput!): Category
+  createCategories(data: [CategoryCreateInput!]!): [Category]
+  updateCategory(where: CategoryWhereUniqueInput!, data: CategoryUpdateInput!): Category
+  updateCategories(data: [CategoryUpdateArgs!]!): [Category]
+  deleteCategory(where: CategoryWhereUniqueInput!): Category
+  deleteCategories(where: [CategoryWhereUniqueInput!]!): [Category]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -430,18 +313,12 @@ type Query {
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   user(where: UserWhereUniqueInput!): User
   usersCount(where: UserWhereInput! = {}): Int
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  post(where: PostWhereUniqueInput!): Post
-  postsCount(where: PostWhereInput! = {}): Int
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
-  tag(where: TagWhereUniqueInput!): Tag
-  tagsCount(where: TagWhereInput! = {}): Int
   purchases(where: PurchaseWhereInput! = {}, orderBy: [PurchaseOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PurchaseWhereUniqueInput): [Purchase!]
   purchase(where: PurchaseWhereUniqueInput!): Purchase
   purchasesCount(where: PurchaseWhereInput! = {}): Int
-  caretgories(where: CaretgoryWhereInput! = {}, orderBy: [CaretgoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CaretgoryWhereUniqueInput): [Caretgory!]
-  caretgory(where: CaretgoryWhereUniqueInput!): Caretgory
-  caretgoriesCount(where: CaretgoryWhereInput! = {}): Int
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  category(where: CategoryWhereUniqueInput!): Category
+  categoriesCount(where: CategoryWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

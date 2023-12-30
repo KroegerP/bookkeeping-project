@@ -1,9 +1,10 @@
+import { Lists } from ".keystone/types";
 import { ListConfig, list } from '@keystone-6/core';
 import { allowAll } from '@keystone-6/core/access';
-import { password, relationship, text, timestamp } from '@keystone-6/core/fields';
+import { password, text, timestamp } from '@keystone-6/core/fields';
 
 
-export const User = {
+export const User: ListConfig<Lists.User.TypeInfo> = list({
   // WARNING
   //   for this starter project, anyone can create, query, update and delete anything
   //   if you want to prevent random people on the internet from accessing your data,
@@ -25,13 +26,9 @@ export const User = {
 
     password: password({ validation: { isRequired: true } }),
 
-    // we can use this field to see what Posts this User has authored
-    //   more on that in the Post list below
-    posts: relationship({ ref: 'Post.author', many: true }),
-
     createdAt: timestamp({
       // this sets the timestamp to Date.now() when the user is first created
       defaultValue: { kind: 'now' },
     }),
   },
-}
+});

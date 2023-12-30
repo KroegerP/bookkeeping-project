@@ -1,7 +1,7 @@
-import { Lists } from './keystone/types';
+import { Lists } from '.keystone/types';
 import { ListConfig, list } from '@keystone-6/core';
 import { allowAll } from '@keystone-6/core/access';
-import { float, text, timestamp } from '@keystone-6/core/fields';
+import { float, relationship, text, timestamp } from '@keystone-6/core/fields';
 
 export const Purchase: ListConfig<Lists.Purchase.TypeInfo> = list({
   // WARNING
@@ -30,7 +30,7 @@ export const Purchase: ListConfig<Lists.Purchase.TypeInfo> = list({
 
     // we can use this field to see what Posts this User has authored
     //   more on that in the Post list below
-    // category: relationship({ ref: 'Category.name' }),
+    category: relationship({ ref: 'Category.purchases' }),
 
     createdAt: timestamp({
       // this sets the timestamp to Date.now() when the user is first created
