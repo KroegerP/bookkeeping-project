@@ -157,11 +157,14 @@ var keystone_default = withAuth(
       },
       // Optional advanced configuration
       enableLogging: true,
-      idField: { kind: "uuid" },
+      idField: { kind: "autoincrement" },
       shadowDatabaseUrl: "postgres://postgres:test@localhost:5432/shadowdb"
     },
     lists,
-    session
+    session,
+    server: {
+      port: 5e3
+    }
   })
 );
 //# sourceMappingURL=config.js.map

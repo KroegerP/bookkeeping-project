@@ -1,7 +1,11 @@
-import { Lists } from '.keystone/types';
-import { ListConfig, list } from '@keystone-6/core';
-import { allowAll } from '@keystone-6/core/access';
-import { float, relationship, text, timestamp } from '@keystone-6/core/fields';
+import type { ListConfig } from "@keystone-6/core";
+import { list } from "@keystone-6/core";
+import { allowAll } from "@keystone-6/core/access";
+import { float, relationship, text, timestamp } from "@keystone-6/core/fields";
+
+import type { Lists } from ".keystone/types";
+
+
 
 export const Purchase: ListConfig<Lists.Purchase.TypeInfo> = list({
   // WARNING
@@ -16,8 +20,8 @@ export const Purchase: ListConfig<Lists.Purchase.TypeInfo> = list({
     // by adding isRequired, we enforce that every User should have a name
     //   if no name is provided, an error will be displayed
     date: timestamp({
-        defaultValue: "2023-12-30T18:05:29.700Z",
-        validation: { isRequired: true },
+      defaultValue: "2023-12-30T18:05:29.700Z",
+      validation: { isRequired: true },
     }),
 
     description: text({
@@ -30,13 +34,13 @@ export const Purchase: ListConfig<Lists.Purchase.TypeInfo> = list({
 
     // we can use this field to see what Posts this User has authored
     //   more on that in the Post list below
-    category: relationship({ ref: 'Category.purchases' }),
+    category: relationship({ ref: "Category.purchases" }),
 
-    createdBy: relationship({ ref: 'User.purchases' }),
+    createdBy: relationship({ ref: "User.purchases" }),
 
     createdAt: timestamp({
       // this sets the timestamp to Date.now() when the user is first created
-      defaultValue: { kind: 'now' },
+      defaultValue: { kind: "now" },
     }),
   },
 });

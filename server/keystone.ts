@@ -22,10 +22,13 @@ export default withAuth(
       onConnect: async context => { /* ... */ },
       // Optional advanced configuration
       enableLogging: true,
-      idField: { kind: 'uuid' },
-      shadowDatabaseUrl: 'postgres://postgres:test@localhost:5432/shadowdb'
+      idField: { kind: "autoincrement" },
+      shadowDatabaseUrl: 'postgres://postgres:test@localhost:5432/shadowdb',
     },
     lists,
     session,
+    server: {
+      port: 5000
+    }
   })
 );
