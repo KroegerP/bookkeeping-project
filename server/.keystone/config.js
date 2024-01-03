@@ -52,6 +52,7 @@ var Purchase = (0, import_core.list)({
     // we can use this field to see what Posts this User has authored
     //   more on that in the Post list below
     category: (0, import_fields.relationship)({ ref: "Category.purchases" }),
+    createdBy: (0, import_fields.relationship)({ ref: "User.purchases" }),
     createdAt: (0, import_fields.timestamp)({
       // this sets the timestamp to Date.now() when the user is first created
       defaultValue: { kind: "now" }
@@ -98,6 +99,7 @@ var User = (0, import_core3.list)({
       isIndexed: "unique"
     }),
     password: (0, import_fields3.password)({ validation: { isRequired: true } }),
+    purchases: (0, import_fields3.relationship)({ ref: "Purchase.createdBy", many: true }),
     createdAt: (0, import_fields3.timestamp)({
       // this sets the timestamp to Date.now() when the user is first created
       defaultValue: { kind: "now" }

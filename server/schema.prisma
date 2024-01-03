@@ -12,11 +12,12 @@ generator client {
 }
 
 model User {
-  id        String    @id @default(uuid()) @postgresql.Uuid
-  name      String    @default("")
-  email     String    @unique @default("")
+  id        String     @id @default(uuid()) @postgresql.Uuid
+  name      String     @default("")
+  email     String     @unique @default("")
   password  String
-  createdAt DateTime? @default(now())
+  purchases Purchase[] @relation("Purchase_createdBy")
+  createdAt DateTime?  @default(now())
 }
 
 model Purchase {
@@ -26,9 +27,12 @@ model Purchase {
   cost        Float
   category    Category? @relation("Purchase_category", fields: [categoryId], references: [id])
   categoryId  String?   @map("category") @postgresql.Uuid
+  createdBy   User?     @relation("Purchase_createdBy", fields: [createdById], references: [id])
+  createdById String?   @map("createdBy") @postgresql.Uuid
   createdAt   DateTime? @default(now())
 
   @@index([categoryId])
+  @@index([createdById])
 }
 
 model Category {

@@ -1,7 +1,7 @@
 import { Lists } from ".keystone/types";
 import { ListConfig, list } from '@keystone-6/core';
 import { allowAll } from '@keystone-6/core/access';
-import { password, text, timestamp } from '@keystone-6/core/fields';
+import { password, relationship, text, timestamp } from '@keystone-6/core/fields';
 
 
 export const User: ListConfig<Lists.User.TypeInfo> = list({
@@ -25,6 +25,8 @@ export const User: ListConfig<Lists.User.TypeInfo> = list({
     }),
 
     password: password({ validation: { isRequired: true } }),
+
+    purchases: relationship({ ref: 'Purchase.createdBy', many: true }),
 
     createdAt: timestamp({
       // this sets the timestamp to Date.now() when the user is first created

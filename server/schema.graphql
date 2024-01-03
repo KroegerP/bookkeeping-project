@@ -6,6 +6,8 @@ type User {
   name: String
   email: String
   password: PasswordState
+  purchases(where: PurchaseWhereInput! = {}, orderBy: [PurchaseOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PurchaseWhereUniqueInput): [Purchase!]
+  purchasesCount(where: PurchaseWhereInput! = {}): Int
   createdAt: DateTime
 }
 
@@ -27,6 +29,7 @@ input UserWhereInput {
   id: IDFilter
   name: StringFilter
   email: StringFilter
+  purchases: PurchaseManyRelationFilter
   createdAt: DateTimeNullableFilter
 }
 
@@ -75,6 +78,12 @@ input NestedStringFilter {
   not: NestedStringFilter
 }
 
+input PurchaseManyRelationFilter {
+  every: PurchaseWhereInput
+  some: PurchaseWhereInput
+  none: PurchaseWhereInput
+}
+
 input DateTimeNullableFilter {
   equals: DateTime
   in: [DateTime!]
@@ -102,7 +111,15 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
+  purchases: PurchaseRelateToManyForUpdateInput
   createdAt: DateTime
+}
+
+input PurchaseRelateToManyForUpdateInput {
+  disconnect: [PurchaseWhereUniqueInput!]
+  set: [PurchaseWhereUniqueInput!]
+  create: [PurchaseCreateInput!]
+  connect: [PurchaseWhereUniqueInput!]
 }
 
 input UserUpdateArgs {
@@ -114,7 +131,13 @@ input UserCreateInput {
   name: String
   email: String
   password: String
+  purchases: PurchaseRelateToManyForCreateInput
   createdAt: DateTime
+}
+
+input PurchaseRelateToManyForCreateInput {
+  create: [PurchaseCreateInput!]
+  connect: [PurchaseWhereUniqueInput!]
 }
 
 type Purchase {
@@ -123,6 +146,7 @@ type Purchase {
   description: String
   cost: Float
   category: Category
+  createdBy: User
   createdAt: DateTime
 }
 
@@ -139,6 +163,7 @@ input PurchaseWhereInput {
   description: StringFilter
   cost: FloatFilter
   category: CategoryWhereInput
+  createdBy: UserWhereInput
   createdAt: DateTimeNullableFilter
 }
 
@@ -177,12 +202,19 @@ input PurchaseUpdateInput {
   description: String
   cost: Float
   category: CategoryRelateToOneForUpdateInput
+  createdBy: UserRelateToOneForUpdateInput
   createdAt: DateTime
 }
 
 input CategoryRelateToOneForUpdateInput {
   create: CategoryCreateInput
   connect: CategoryWhereUniqueInput
+  disconnect: Boolean
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -196,12 +228,18 @@ input PurchaseCreateInput {
   description: String
   cost: Float
   category: CategoryRelateToOneForCreateInput
+  createdBy: UserRelateToOneForCreateInput
   createdAt: DateTime
 }
 
 input CategoryRelateToOneForCreateInput {
   create: CategoryCreateInput
   connect: CategoryWhereUniqueInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 type Category {
@@ -225,12 +263,6 @@ input CategoryWhereInput {
   purchases: PurchaseManyRelationFilter
 }
 
-input PurchaseManyRelationFilter {
-  every: PurchaseWhereInput
-  some: PurchaseWhereInput
-  none: PurchaseWhereInput
-}
-
 input CategoryOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -241,13 +273,6 @@ input CategoryUpdateInput {
   purchases: PurchaseRelateToManyForUpdateInput
 }
 
-input PurchaseRelateToManyForUpdateInput {
-  disconnect: [PurchaseWhereUniqueInput!]
-  set: [PurchaseWhereUniqueInput!]
-  create: [PurchaseCreateInput!]
-  connect: [PurchaseWhereUniqueInput!]
-}
-
 input CategoryUpdateArgs {
   where: CategoryWhereUniqueInput!
   data: CategoryUpdateInput!
@@ -256,11 +281,6 @@ input CategoryUpdateArgs {
 input CategoryCreateInput {
   name: String
   purchases: PurchaseRelateToManyForCreateInput
-}
-
-input PurchaseRelateToManyForCreateInput {
-  create: [PurchaseCreateInput!]
-  connect: [PurchaseWhereUniqueInput!]
 }
 
 """

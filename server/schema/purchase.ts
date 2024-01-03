@@ -32,6 +32,8 @@ export const Purchase: ListConfig<Lists.Purchase.TypeInfo> = list({
     //   more on that in the Post list below
     category: relationship({ ref: 'Category.purchases' }),
 
+    createdBy: relationship({ ref: 'User.purchases' }),
+
     createdAt: timestamp({
       // this sets the timestamp to Date.now() when the user is first created
       defaultValue: { kind: 'now' },
