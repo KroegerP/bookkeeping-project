@@ -1,7 +1,9 @@
-import { Lists } from ".keystone/types";
-import { ListConfig, list } from '@keystone-6/core';
-import { allowAll } from '@keystone-6/core/access';
-import { password, relationship, text, timestamp } from '@keystone-6/core/fields';
+import type { Lists } from ".keystone/types";
+import type { ListConfig } from "@keystone-6/core";
+import { list } from "@keystone-6/core";
+import { allowAll } from "@keystone-6/core/access";
+import { password, relationship, text, timestamp } from "@keystone-6/core/fields";
+
 
 
 export const User: ListConfig<Lists.User.TypeInfo> = list({
@@ -21,16 +23,16 @@ export const User: ListConfig<Lists.User.TypeInfo> = list({
       validation: { isRequired: true },
       // by adding isIndexed: 'unique', we're saying that no user can have the same
       // email as another user - this may or may not be a good idea for your project
-      isIndexed: 'unique',
+      isIndexed: "unique",
     }),
 
     password: password({ validation: { isRequired: true } }),
 
-    purchases: relationship({ ref: 'Purchase.createdBy', many: true }),
+    purchases: relationship({ ref: "Purchase.createdBy", many: true }),
 
     createdAt: timestamp({
       // this sets the timestamp to Date.now() when the user is first created
-      defaultValue: { kind: 'now' },
+      defaultValue: { kind: "now" },
     }),
   },
 });

@@ -1,11 +1,17 @@
 {
+  "ts-node": {
+    "files": true
+  },
   "compilerOptions": {
     "target": "esnext",
-    "module": "NodeNext",
+    "types": ["node"],
+    "module": "CommonJS",
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
-  }
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["**/node_modules/**/*"]
 }
