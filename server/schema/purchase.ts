@@ -31,6 +31,8 @@ export const Purchase: ListConfig<Lists.Purchase.TypeInfo> = list({
 
     cost: float({ validation: { isRequired: true } }),
 
+    total: float({ validation: { isRequired: true } }),
+
     // we can use this field to see what Posts this User has authored
     //   more on that in the Post list below
     category: relationship({ ref: "Category.purchases" }),

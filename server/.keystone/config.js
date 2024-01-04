@@ -59,11 +59,11 @@ var session = (0, import_session.statelessSessions)({
   secret: sessionSecret
 });
 
-// schema/purchase.ts
+// schema/category.ts
 var import_core = require("@keystone-6/core");
 var import_access = require("@keystone-6/core/access");
 var import_fields = require("@keystone-6/core/fields");
-var Purchase = (0, import_core.list)({
+var Category = (0, import_core.list)({
   // WARNING
   //   for this starter project, anyone can create, query, update and delete anything
   //   if you want to prevent random people on the internet from accessing your data,
@@ -71,34 +71,16 @@ var Purchase = (0, import_core.list)({
   access: import_access.allowAll,
   // this is the fields for our User list
   fields: {
-    // by adding isRequired, we enforce that every User should have a name
-    //   if no name is provided, an error will be displayed
-    date: (0, import_fields.timestamp)({
-      defaultValue: "2023-12-30T18:05:29.700Z",
-      validation: { isRequired: true }
-    }),
-    description: (0, import_fields.text)({
-      validation: { isRequired: true }
-      // by adding isIndexed: 'unique', we're saying that no user can have the same
-      // email as another user - this may or may not be a good idea for your project,
-    }),
-    cost: (0, import_fields.float)({ validation: { isRequired: true } }),
-    // we can use this field to see what Posts this User has authored
-    //   more on that in the Post list below
-    category: (0, import_fields.relationship)({ ref: "Category.purchases" }),
-    createdBy: (0, import_fields.relationship)({ ref: "User.purchases" }),
-    createdAt: (0, import_fields.timestamp)({
-      // this sets the timestamp to Date.now() when the user is first created
-      defaultValue: { kind: "now" }
-    })
+    name: (0, import_fields.text)({ validation: { isRequired: true }, isIndexed: "unique" }),
+    purchases: (0, import_fields.relationship)({ ref: "Purchase.category", many: true })
   }
 });
 
-// schema/category.ts
+// schema/purchase.ts
 var import_core2 = require("@keystone-6/core");
 var import_access2 = require("@keystone-6/core/access");
 var import_fields2 = require("@keystone-6/core/fields");
-var Category = (0, import_core2.list)({
+var Purchase = (0, import_core2.list)({
   // WARNING
   //   for this starter project, anyone can create, query, update and delete anything
   //   if you want to prevent random people on the internet from accessing your data,
@@ -106,8 +88,26 @@ var Category = (0, import_core2.list)({
   access: import_access2.allowAll,
   // this is the fields for our User list
   fields: {
-    name: (0, import_fields2.text)({ validation: { isRequired: true }, isIndexed: "unique" }),
-    purchases: (0, import_fields2.relationship)({ ref: "Purchase.category", many: true })
+    // by adding isRequired, we enforce that every User should have a name
+    //   if no name is provided, an error will be displayed
+    date: (0, import_fields2.timestamp)({
+      defaultValue: "2023-12-30T18:05:29.700Z",
+      validation: { isRequired: true }
+    }),
+    description: (0, import_fields2.text)({
+      validation: { isRequired: true }
+      // by adding isIndexed: 'unique', we're saying that no user can have the same
+      // email as another user - this may or may not be a good idea for your project,
+    }),
+    cost: (0, import_fields2.float)({ validation: { isRequired: true } }),
+    // we can use this field to see what Posts this User has authored
+    //   more on that in the Post list below
+    category: (0, import_fields2.relationship)({ ref: "Category.purchases" }),
+    createdBy: (0, import_fields2.relationship)({ ref: "User.purchases" }),
+    createdAt: (0, import_fields2.timestamp)({
+      // this sets the timestamp to Date.now() when the user is first created
+      defaultValue: { kind: "now" }
+    })
   }
 });
 

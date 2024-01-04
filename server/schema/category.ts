@@ -15,6 +15,7 @@ export const Category: ListConfig<Lists.Category.TypeInfo> = list({
 
   // this is the fields for our User list
   fields: {
+
     name: text({ validation: { isRequired: true }, isIndexed: "unique" }),
 
     purchases: relationship({ ref: "Purchase.category", many: true }),
