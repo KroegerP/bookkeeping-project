@@ -145,6 +145,7 @@ type Purchase {
   date: DateTime
   description: String
   cost: Float
+  total: Float
   category: Category
   createdBy: User
   createdAt: DateTime
@@ -162,6 +163,7 @@ input PurchaseWhereInput {
   date: DateTimeFilter
   description: StringFilter
   cost: FloatFilter
+  total: FloatFilter
   category: CategoryWhereInput
   createdBy: UserWhereInput
   createdAt: DateTimeNullableFilter
@@ -194,6 +196,7 @@ input PurchaseOrderByInput {
   date: OrderDirection
   description: OrderDirection
   cost: OrderDirection
+  total: OrderDirection
   createdAt: OrderDirection
 }
 
@@ -201,6 +204,7 @@ input PurchaseUpdateInput {
   date: DateTime
   description: String
   cost: Float
+  total: Float
   category: CategoryRelateToOneForUpdateInput
   createdBy: UserRelateToOneForUpdateInput
   createdAt: DateTime
@@ -227,6 +231,7 @@ input PurchaseCreateInput {
   date: DateTime
   description: String
   cost: Float
+  total: Float
   category: CategoryRelateToOneForCreateInput
   createdBy: UserRelateToOneForCreateInput
   createdAt: DateTime

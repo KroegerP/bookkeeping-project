@@ -100,6 +100,7 @@ var Purchase = (0, import_core2.list)({
       // email as another user - this may or may not be a good idea for your project,
     }),
     cost: (0, import_fields2.float)({ validation: { isRequired: true } }),
+    total: (0, import_fields2.float)({ validation: { isRequired: true } }),
     // we can use this field to see what Posts this User has authored
     //   more on that in the Post list below
     category: (0, import_fields2.relationship)({ ref: "Category.purchases" }),

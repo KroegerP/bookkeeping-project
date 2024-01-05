@@ -25,6 +25,7 @@ model Purchase {
   date        DateTime  @default("2023-12-30T18:05:29.700Z")
   description String    @default("")
   cost        Float
+  total       Float
   category    Category? @relation("Purchase_category", fields: [categoryId], references: [id])
   categoryId  Int?      @map("category")
   createdBy   User?     @relation("Purchase_createdBy", fields: [createdById], references: [id])
