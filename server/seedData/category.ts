@@ -43,4 +43,8 @@ export const category = [
     name : "Presents",
     id : 11,
   },
+  {
+    name : "Other",
+    id : 12,
+  },
 ];
