@@ -1,0 +1,16 @@
+overwrite: true
+schema: "../server/schema.graphql"
+documents:
+  - "documents/**/*.graphql"
+generates:
+  ../server/generated/graphql.ts: &genconfig
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typed-document-node"
+    config:
+      scalars:
+        DateTime: string
+        Date: string
+  ../client/generated/graphql.ts: *genconfig
+config:

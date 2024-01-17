@@ -1,0 +1,13 @@
+fragment PurchaseBasic on Purchase {
+  id
+  date
+  description
+  cost
+  total
+  category {
+    id
+    name
+  }
+
+  createdAt
+}

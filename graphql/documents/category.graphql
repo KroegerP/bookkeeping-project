@@ -1,0 +1,4 @@
+fragment CategoryFull on Category {
+  id
+  name
+}
