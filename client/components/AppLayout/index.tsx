@@ -8,8 +8,10 @@ interface AppLayoutProps {
 
 export function AppLayout({ children }: AppLayoutProps) {
   return (
+    
     <div className="box-border">
       {children}
     </div>
+    
   );
 }

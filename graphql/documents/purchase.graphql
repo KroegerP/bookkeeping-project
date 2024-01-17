@@ -11,3 +11,9 @@ fragment PurchaseBasic on Purchase {
 
   createdAt
 }
+
+query GetPurchases($where: PurchaseWhereInput, $orderBy: [PurchaseOrderByInput!]!) {
+  purchases(where: $where, orderBy: $orderBy) {
+   ...PurchaseBasic
+  }
+}
