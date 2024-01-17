@@ -1,16 +1,11 @@
 module.exports = {
-  env: {
-    es2021: true,
-    node: true,
-  },
   plugins: [
     "@typescript-eslint",
     "import",
   ],
   settings: {
     "import/resolver": {
-      typescript: true,
-      node: true,
+      typescript: {},
     },
   },
   extends: [
@@ -22,9 +17,6 @@ module.exports = {
   ],
   overrides: [],
   parser: "@typescript-eslint/parser",
-  parserOptions: {
-    ecmaVersion: "latest",
-  },
   rules: {
     // Plugin Rules
     "@typescript-eslint/brace-style": ["error", "1tbs", { allowSingleLine: true }],
