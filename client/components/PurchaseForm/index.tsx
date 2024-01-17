@@ -32,7 +32,7 @@ export function PurchseForm() {
 
   const costWatcher = form.watch("cost");
 
-  const totalCalc = useMemo(() => DEFAULT_TOTAL + parseFloat(costWatcher.toString()), [costWatcher]);
+  const totalCalc = useMemo(() => DEFAULT_TOTAL + Number.parseFloat(costWatcher.toString()), [costWatcher]);
 
   console.log(totalCalc);
 
