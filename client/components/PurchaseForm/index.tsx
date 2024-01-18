@@ -1,3 +1,4 @@
+import { useQuery } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useMemo } from "react";
 import type { SubmitHandler } from "react-hook-form";
@@ -8,21 +9,25 @@ import { DatePicker } from "../DatePicker";
 import { Button } from "../ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
-import { Select } from "../ui/select";
+import { GetPurchasesDocument } from "@/generated/graphql";
 
 
 
-const DEFAULT_TOTAL = 1000;
+const DEFAULT_TOTAL: number = 1000;
 
 const formSchema = z.object({
   date: z.date(),
   description: z.string().min(2),
-  cost: z.number(),
+  cost: z.string(), // Weird form thing going on here
   total: z.number(),
   category: z.number(),
 });
 
 export function PurchseForm() {
+  const { data } = useQuery(GetPurchasesDocument);
+
+  console.log(data);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,7 +37,7 @@ export function PurchseForm() {
 
   const costWatcher = form.watch("cost");
 
-  const totalCalc = useMemo(() => DEFAULT_TOTAL + Number.parseFloat(costWatcher.toString()), [costWatcher]);
+  const totalCalc = useMemo(() => DEFAULT_TOTAL +  Number.parseFloat(costWatcher ?? "0"), [costWatcher]);
 
   console.log(totalCalc);
 
@@ -78,6 +83,7 @@ export function PurchseForm() {
           />
           <FormField 
             name="total"
+            disabled={true}
             control={form.control}
             render={({ field }) => (
               <FormItem>
@@ -90,13 +96,13 @@ export function PurchseForm() {
           <FormField 
             name="category"
             control={form.control}
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormLabel className="mr-5">Category</FormLabel>
                 <FormControl>
-                  <Select 
+                  {/* <Select 
                     {...field}
-                  />
+                  /> */}
                 </FormControl>
               </FormItem>
             )} />

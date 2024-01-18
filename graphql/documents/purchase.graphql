@@ -17,3 +17,9 @@ query GetPurchases($where: PurchaseWhereInput, $orderBy: [PurchaseOrderByInput!]
    ...PurchaseBasic
   }
 }
+
+query GetPurchases($where: PurchaseCreateInput, $orderBy: [PurchaseOrderByInput!]!) {
+  createPurchase(where: $where, orderBy: $orderBy) {
+   ...PurchaseBasic
+  }
+}

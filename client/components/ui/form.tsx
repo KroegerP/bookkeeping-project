@@ -12,8 +12,7 @@ import {
 } from "react-hook-form";
 
 import { Label } from "./label";
-import { cn } from "../../lib/utils";
-import "../../app/globals.css";
+import { cn } from "@/lib/utils";
 
 
 
