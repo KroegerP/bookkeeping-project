@@ -29,6 +29,7 @@ export const configuration = config({
   session,
   server: {
     port: 5000,
+    cors: { origin: ["http://localhost:3000"], credentials: true },
   },
 });
 

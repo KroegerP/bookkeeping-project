@@ -18,8 +18,10 @@ query GetPurchases($where: PurchaseWhereInput, $orderBy: [PurchaseOrderByInput!]
   }
 }
 
-query GetPurchases($where: PurchaseCreateInput, $orderBy: [PurchaseOrderByInput!]!) {
-  createPurchase(where: $where, orderBy: $orderBy) {
-   ...PurchaseBasic
+mutation CreatePurchase($data: PurchaseCreateInput!) {
+  createPurchase(data: $data) {
+    id
+    description
+    date
   }
 }

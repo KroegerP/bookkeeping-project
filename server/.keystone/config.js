@@ -165,7 +165,8 @@ var configuration = (0, import_core4.config)({
   lists,
   session,
   server: {
-    port: 5e3
+    port: 5e3,
+    cors: { origin: ["http://localhost:3000"], credentials: true }
   }
 });
 var keystone_default = withAuth(

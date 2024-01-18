@@ -39,11 +39,8 @@ export function PurchseForm() {
 
   const totalCalc = useMemo(() => DEFAULT_TOTAL +  Number.parseFloat(costWatcher ?? "0"), [costWatcher]);
 
-  console.log(totalCalc);
-
   useEffect(() => form.setValue("total", totalCalc), [totalCalc, form]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = useCallback<SubmitHandler<z.infer<typeof formSchema>>>(async (data) =>
     console.log(data)
   , []);
