@@ -3,19 +3,12 @@ import { useMemo } from "react";
 
 import { LoadingIndicator } from "@/components/LoadingIndicator";
 import { PurchseForm } from "@/components/PurchaseForm";
-import { GetPurchasesDocument, OrderDirection } from "@/generated/graphql";
+import { GetMostRecentPurchaseDocument } from "@/generated/graphql";
 
 
 
 const Home = () => {
-  const { data, loading } = useQuery(GetPurchasesDocument, {
-    variables: {
-      orderBy: [
-        { date: OrderDirection.Desc },
-        { id: OrderDirection.Desc },
-      ],
-    },
-  });
+  const { data, loading } = useQuery(GetMostRecentPurchaseDocument);
 
   const previousTotal = useMemo(() => data?.purchases?.[0]?.total ?? 0, [data?.purchases]);
 

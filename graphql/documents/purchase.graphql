@@ -12,8 +12,14 @@ fragment PurchaseBasic on Purchase {
   createdAt
 }
 
-query GetPurchases($where: PurchaseWhereInput, $orderBy: [PurchaseOrderByInput!]!) {
-  purchases(where: $where, orderBy: $orderBy) {
+query GetPurchases($where: PurchaseWhereInput, $orderBy: [PurchaseOrderByInput!]!, $take: Int) {
+  purchases(where: $where, orderBy: $orderBy, take: $take) {
+   ...PurchaseBasic
+  }
+}
+
+query GetMostRecentPurchase($where: PurchaseWhereInput) {
+  purchases(where: $where, orderBy: { createdAt: desc }, take: 1) {
    ...PurchaseBasic
   }
 }

@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
@@ -14,9 +13,11 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/useToast";
-import { CreatePurchaseDocument, GetCategoriesDocument } from "@/generated/graphql";
+import { CreatePurchaseDocument, GetCategoriesDocument, GetPurchasesDocument } from "@/generated/graphql";
 
 
+
+const ROUNDING_NUMBER = 100;
 
 const formSchema = z.object({
   date: z.date(),
@@ -30,12 +31,11 @@ interface PurchaseFormProps {
 }
 
 export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
-  const router = useRouter();
   const { toast } = useToast();
 
   const { data: categoryData, loading } = useQuery(GetCategoriesDocument);
 
-  const [createPurchase] = useMutation(CreatePurchaseDocument);
+  const [createPurchase] = useMutation(CreatePurchaseDocument, { refetchQueries: [GetPurchasesDocument] });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,7 +46,7 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
 
   const costWatcher = form.watch("cost");
 
-  const totalCalc = useMemo(() => previousTotal +  Number.parseFloat(costWatcher ?? "0"), [previousTotal, costWatcher]);
+  const totalCalc = useMemo(() => Math.round((previousTotal * ROUNDING_NUMBER) + (Number.parseFloat(costWatcher ?? "0") * ROUNDING_NUMBER)) / ROUNDING_NUMBER, [previousTotal, costWatcher]);
 
   const onSubmit = useCallback<SubmitHandler<z.infer<typeof formSchema>>>(async (data) => {
     console.log(data);
@@ -66,13 +66,14 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
       .then((res) => toast({
         title: "Added Purchase",
         description: `${res?.data?.createPurchase?.description}`,
+        duration: 5,
       }))
-      .then(() => router.reload())
+      .then(() => form.resetField("cost"))
       .catch((error) => console.error(error.message));
-  }, [createPurchase, router, toast, totalCalc]);
+  }, [createPurchase, form, toast, totalCalc]);
   
   return (
-    <div className="p-4 max-h-fit h-fit bg-slate-400">
+    <div className="p-4 max-h-fit h-fit bg-slate-400 dark:bg-slate-500 rounded">
       <h1 className="mb-4">Enter Data</h1>
       <Form {...form}>
         <form 
@@ -117,7 +118,7 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
                           key={category.id} 
                           value={category.id}
                         >
-                          {index} {category.name}
+                          {category.name} {index + 1} 
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -131,7 +132,7 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Cost</FormLabel>
-                <Input type="number" placeholder="0" {...field}/>
+                <Input type="float" placeholder="0" {...field}/>
               </FormItem>
             )}
           />
