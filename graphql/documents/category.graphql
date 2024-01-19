@@ -2,3 +2,10 @@ fragment CategoryFull on Category {
   id
   name
 }
+
+query GetCategories {
+  categories {
+    id
+    name
+  }
+}

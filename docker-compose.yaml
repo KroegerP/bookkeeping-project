@@ -22,7 +22,7 @@ services:
   #     - 3000:3000
   database:
     container_name: name-database
-    image: postgres:alpine
+    image: postgres:16.1
     # build:
     #   context: ./database
     #   dockerfile: Dockerfile

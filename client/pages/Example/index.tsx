@@ -21,7 +21,7 @@ const ExamplePage: NextPage = () => {
   return (
     <div className="flex justify-center align-middle box-border w-full h-screen bg-slate-700">
       <div className="w-3/4 flex justify-center align-middle">
-        <PurchseForm />
+        <PurchseForm previousTotal={0}/>
       </div>
     </div>
   );
