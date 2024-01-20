@@ -147,6 +147,7 @@ type Purchase {
   cost: Float
   total: Float
   category: Category
+  card: Card
   createdBy: User
   createdAt: DateTime
 }
@@ -165,6 +166,7 @@ input PurchaseWhereInput {
   cost: FloatFilter
   total: FloatFilter
   category: CategoryWhereInput
+  card: CardWhereInput
   createdBy: UserWhereInput
   createdAt: DateTimeNullableFilter
 }
@@ -206,6 +208,7 @@ input PurchaseUpdateInput {
   cost: Float
   total: Float
   category: CategoryRelateToOneForUpdateInput
+  card: CardRelateToOneForUpdateInput
   createdBy: UserRelateToOneForUpdateInput
   createdAt: DateTime
 }
@@ -213,6 +216,12 @@ input PurchaseUpdateInput {
 input CategoryRelateToOneForUpdateInput {
   create: CategoryCreateInput
   connect: CategoryWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CardRelateToOneForUpdateInput {
+  create: CardCreateInput
+  connect: CardWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -233,6 +242,7 @@ input PurchaseCreateInput {
   cost: Float
   total: Float
   category: CategoryRelateToOneForCreateInput
+  card: CardRelateToOneForCreateInput
   createdBy: UserRelateToOneForCreateInput
   createdAt: DateTime
 }
@@ -240,6 +250,11 @@ input PurchaseCreateInput {
 input CategoryRelateToOneForCreateInput {
   create: CategoryCreateInput
   connect: CategoryWhereUniqueInput
+}
+
+input CardRelateToOneForCreateInput {
+  create: CardCreateInput
+  connect: CardWhereUniqueInput
 }
 
 input UserRelateToOneForCreateInput {
@@ -288,6 +303,83 @@ input CategoryCreateInput {
   purchases: PurchaseRelateToManyForCreateInput
 }
 
+type Card {
+  id: ID!
+  name: String
+  bank: String
+  lastFour: String
+  creditCard: Boolean
+  notes: String
+  purchases(where: PurchaseWhereInput! = {}, orderBy: [PurchaseOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PurchaseWhereUniqueInput): [Purchase!]
+  purchasesCount(where: PurchaseWhereInput! = {}): Int
+  expiresAt: DateTime
+  createdAt: DateTime
+}
+
+input CardWhereUniqueInput {
+  id: ID
+  name: String
+  lastFour: String
+}
+
+input CardWhereInput {
+  AND: [CardWhereInput!]
+  OR: [CardWhereInput!]
+  NOT: [CardWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  bank: StringFilter
+  lastFour: StringFilter
+  creditCard: BooleanFilter
+  notes: StringFilter
+  purchases: PurchaseManyRelationFilter
+  expiresAt: DateTimeNullableFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input BooleanFilter {
+  equals: Boolean
+  not: BooleanFilter
+}
+
+input CardOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  bank: OrderDirection
+  lastFour: OrderDirection
+  creditCard: OrderDirection
+  notes: OrderDirection
+  expiresAt: OrderDirection
+  createdAt: OrderDirection
+}
+
+input CardUpdateInput {
+  name: String
+  bank: String
+  lastFour: String
+  creditCard: Boolean
+  notes: String
+  purchases: PurchaseRelateToManyForUpdateInput
+  expiresAt: DateTime
+  createdAt: DateTime
+}
+
+input CardUpdateArgs {
+  where: CardWhereUniqueInput!
+  data: CardUpdateInput!
+}
+
+input CardCreateInput {
+  name: String
+  bank: String
+  lastFour: String
+  creditCard: Boolean
+  notes: String
+  purchases: PurchaseRelateToManyForCreateInput
+  expiresAt: DateTime
+  createdAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -312,6 +404,12 @@ type Mutation {
   updateCategories(data: [CategoryUpdateArgs!]!): [Category]
   deleteCategory(where: CategoryWhereUniqueInput!): Category
   deleteCategories(where: [CategoryWhereUniqueInput!]!): [Category]
+  createCard(data: CardCreateInput!): Card
+  createCards(data: [CardCreateInput!]!): [Card]
+  updateCard(where: CardWhereUniqueInput!, data: CardUpdateInput!): Card
+  updateCards(data: [CardUpdateArgs!]!): [Card]
+  deleteCard(where: CardWhereUniqueInput!): Card
+  deleteCards(where: [CardWhereUniqueInput!]!): [Card]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -344,6 +442,9 @@ type Query {
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   category(where: CategoryWhereUniqueInput!): Category
   categoriesCount(where: CategoryWhereInput! = {}): Int
+  cards(where: CardWhereInput! = {}, orderBy: [CardOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CardWhereUniqueInput): [Card!]
+  card(where: CardWhereUniqueInput!): Card
+  cardsCount(where: CardWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

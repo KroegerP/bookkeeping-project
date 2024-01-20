@@ -9,8 +9,8 @@ services:
   #   env_file:
   #     - .env
   #   ports:
-  #     - 6543:6543
-  #   command: ./scripts/start.sh
+  #     - 5000:5000
+  #   command: "yarn dev"
   # client:
   #   container_name: name-frontend
   #   build:
@@ -23,9 +23,6 @@ services:
   database:
     container_name: name-database
     image: postgres:16.1
-    # build:
-    #   context: ./database
-    #   dockerfile: Dockerfile
     env_file:
       - .env
     ports:

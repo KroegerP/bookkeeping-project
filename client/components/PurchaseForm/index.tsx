@@ -63,11 +63,13 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
         },
       },
     } })
-      .then((res) => toast({
-        title: "Added Purchase",
-        description: `${res?.data?.createPurchase?.description}`,
-        duration: 5,
-      }))
+      .then((res) => {
+        toast({
+          title: "Added Purchase",
+          description: `${res?.data?.createPurchase?.description}`,
+          duration: 5,
+        });
+      })
       .then(() => form.resetField("cost"))
       .catch((error) => console.error(error.message));
   }, [createPurchase, form, toast, totalCalc]);
@@ -113,12 +115,13 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
 
                     <SelectContent position="popper">
                       {categoryData?.categories?.map((category, index) => (
+                        
                         <SelectItem 
                           className={index % 2 === 0 ? "bg-slate-100 dark:bg-slate-900" : ""}
                           key={category.id} 
                           value={category.id}
                         >
-                          {category.name} {index + 1} 
+                          {category.name}
                         </SelectItem>
                       ))}
                     </SelectContent>

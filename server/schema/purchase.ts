@@ -37,6 +37,8 @@ export const Purchase: ListConfig<Lists.Purchase.TypeInfo> = list({
     //   more on that in the Post list below
     category: relationship({ ref: "Category.purchases" }),
 
+    card: relationship({ ref: "Card.purchases" }),
+
     createdBy: relationship({ ref: "User.purchases" }),
 
     createdAt: timestamp({

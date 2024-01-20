@@ -28,11 +28,14 @@ model Purchase {
   total       Float
   category    Category? @relation("Purchase_category", fields: [categoryId], references: [id])
   categoryId  Int?      @map("category")
+  card        Card?     @relation("Purchase_card", fields: [cardId], references: [id])
+  cardId      Int?      @map("card")
   createdBy   User?     @relation("Purchase_createdBy", fields: [createdById], references: [id])
   createdById Int?      @map("createdBy")
   createdAt   DateTime? @default(now())
 
   @@index([categoryId])
+  @@index([cardId])
   @@index([createdById])
 }
 
@@ -40,4 +43,16 @@ model Category {
   id        Int        @id @default(autoincrement())
   name      String     @unique @default("")
   purchases Purchase[] @relation("Purchase_category")
+}
+
+model Card {
+  id         Int        @id @default(autoincrement())
+  name       String     @unique @default("")
+  bank       String     @default("")
+  lastFour   String     @unique @default("")
+  creditCard Boolean    @default(false)
+  notes      String     @default("")
+  purchases  Purchase[] @relation("Purchase_card")
+  expiresAt  DateTime?  @default(now())
+  createdAt  DateTime?  @default(now())
 }
