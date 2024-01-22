@@ -14,11 +14,9 @@ const Home = () => {
   const previousTotal = useMemo(() => data?.purchases?.[0]?.total ?? 0, [data?.purchases]);
 
   return (
-    <div className="flex justify-center">
-      <div className="w-full flex justify-center items-center">
-        {loading? <LoadingIndicator /> : <PurchseForm previousTotal={previousTotal} />}
-        <PurchaseTable />
-      </div>
+    <div className="w-full flex justify-center items-center">
+      {loading? <LoadingIndicator /> : <PurchseForm previousTotal={previousTotal} />}
+      <PurchaseTable />
     </div>
   );
 };

@@ -14,20 +14,18 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className={inter.className}>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <ApolloProvider client={apolloClient}>
-          <AppLayout>
-            <Component {...pageProps} />
-          </AppLayout>
-        </ApolloProvider>
-        <Toaster />
-      </ThemeProvider>
-    </div>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="dark"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <ApolloProvider client={apolloClient}>
+        <AppLayout className={inter.className}>
+          <Component {...pageProps} />
+        </AppLayout>
+      </ApolloProvider>
+      <Toaster />
+    </ThemeProvider>
   );
 }

@@ -5,12 +5,13 @@ import { MenuBar } from "../MenuBar";
 
 
 interface AppLayoutProps {
+  className: string;
   children: ReactNode;
 }
 
-export function AppLayout({ children }: Readonly<AppLayoutProps>) {
+export function AppLayout({ className, children }: Readonly<AppLayoutProps>) {
   return (
-    <div className="container box-border">
+    <div className={`${className} container box-border h-screen`}>
       <MenuBar />
       {children}
     </div>
