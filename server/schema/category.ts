@@ -4,6 +4,8 @@ import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { relationship, text } from "@keystone-6/core/fields";
 
+import { makeNonNullRef } from "./utils";
+
 
 
 export const Category: ListConfig<Lists.Category.TypeInfo> = list({
@@ -16,7 +18,7 @@ export const Category: ListConfig<Lists.Category.TypeInfo> = list({
   // this is the fields for our User list
   fields: {
 
-    name: text({ validation: { isRequired: true }, isIndexed: "unique" }),
+    name: text({ validation: { isRequired: true }, isIndexed: "unique", ...makeNonNullRef() }),
 
     purchases: relationship({ ref: "Purchase.category", many: true }),
   },

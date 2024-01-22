@@ -63,14 +63,29 @@ var session = (0, import_session.statelessSessions)({
 var import_core = require("@keystone-6/core");
 var import_access = require("@keystone-6/core/access");
 var import_fields = require("@keystone-6/core/fields");
+
+// schema/utils/index.ts
+function makeNonNullRef() {
+  return {
+    graphql: {
+      isNonNull: {
+        read: true,
+        create: true,
+        update: true
+      }
+    }
+  };
+}
+
+// schema/card.ts
 var Card = (0, import_core.list)({
   access: import_access.allowAll,
   fields: {
-    name: (0, import_fields.text)({ validation: { isRequired: true }, isIndexed: "unique" }),
-    bank: (0, import_fields.text)({ validation: { isRequired: true } }),
-    lastFour: (0, import_fields.text)({ validation: { isRequired: true }, isIndexed: "unique" }),
-    creditCard: (0, import_fields.checkbox)(),
-    notes: (0, import_fields.text)(),
+    name: (0, import_fields.text)({ validation: { isRequired: true }, isIndexed: "unique", ...makeNonNullRef() }),
+    bank: (0, import_fields.text)({ validation: { isRequired: true }, ...makeNonNullRef() }),
+    lastFour: (0, import_fields.text)({ validation: { isRequired: true }, isIndexed: "unique", ...makeNonNullRef() }),
+    creditCard: (0, import_fields.checkbox)({ defaultValue: false }),
+    notes: (0, import_fields.text)({ validation: { isRequired: false } }),
     purchases: (0, import_fields.relationship)({ ref: "Purchase.card", many: true }),
     expiresAt: (0, import_fields.timestamp)({
       // this sets the timestamp to Date.now() when the user is first created
@@ -94,7 +109,7 @@ var Category = (0, import_core2.list)({
   access: import_access2.allowAll,
   // this is the fields for our User list
   fields: {
-    name: (0, import_fields2.text)({ validation: { isRequired: true }, isIndexed: "unique" }),
+    name: (0, import_fields2.text)({ validation: { isRequired: true }, isIndexed: "unique", ...makeNonNullRef() }),
     purchases: (0, import_fields2.relationship)({ ref: "Purchase.category", many: true })
   }
 });
@@ -115,18 +130,23 @@ var Purchase = (0, import_core3.list)({
     //   if no name is provided, an error will be displayed
     date: (0, import_fields3.timestamp)({
       defaultValue: "2023-12-30T18:05:29.700Z",
-      validation: { isRequired: true }
+      validation: { isRequired: true },
+      ...makeNonNullRef()
     }),
     description: (0, import_fields3.text)({
-      validation: { isRequired: true }
+      validation: { isRequired: true },
       // by adding isIndexed: 'unique', we're saying that no user can have the same
       // email as another user - this may or may not be a good idea for your project,
+      ...makeNonNullRef()
     }),
-    cost: (0, import_fields3.float)({ validation: { isRequired: true } }),
-    total: (0, import_fields3.float)({ validation: { isRequired: true } }),
+    cost: (0, import_fields3.float)({
+      validation: { isRequired: true },
+      ...makeNonNullRef()
+    }),
+    total: (0, import_fields3.float)({ validation: { isRequired: true }, ...makeNonNullRef() }),
     // we can use this field to see what Posts this User has authored
     //   more on that in the Post list below
-    category: (0, import_fields3.relationship)({ ref: "Category.purchases" }),
+    category: (0, import_fields3.relationship)({ ref: "Category.purchases", ...makeNonNullRef() }),
     card: (0, import_fields3.relationship)({ ref: "Card.purchases" }),
     createdBy: (0, import_fields3.relationship)({ ref: "User.purchases" }),
     createdAt: (0, import_fields3.timestamp)({

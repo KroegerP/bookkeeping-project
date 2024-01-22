@@ -142,11 +142,11 @@ input PurchaseRelateToManyForCreateInput {
 
 type Purchase {
   id: ID!
-  date: DateTime
-  description: String
-  cost: Float
-  total: Float
-  category: Category
+  date: DateTime!
+  description: String!
+  cost: Float!
+  total: Float!
+  category: Category!
   card: Card
   createdBy: User
   createdAt: DateTime
@@ -203,11 +203,11 @@ input PurchaseOrderByInput {
 }
 
 input PurchaseUpdateInput {
-  date: DateTime
-  description: String
-  cost: Float
-  total: Float
-  category: CategoryRelateToOneForUpdateInput
+  date: DateTime!
+  description: String!
+  cost: Float!
+  total: Float!
+  category: CategoryRelateToOneForUpdateInput!
   card: CardRelateToOneForUpdateInput
   createdBy: UserRelateToOneForUpdateInput
   createdAt: DateTime
@@ -237,11 +237,11 @@ input PurchaseUpdateArgs {
 }
 
 input PurchaseCreateInput {
-  date: DateTime
-  description: String
-  cost: Float
-  total: Float
-  category: CategoryRelateToOneForCreateInput
+  date: DateTime! = "2023-12-30T18:05:29.700Z"
+  description: String! = ""
+  cost: Float!
+  total: Float!
+  category: CategoryRelateToOneForCreateInput!
   card: CardRelateToOneForCreateInput
   createdBy: UserRelateToOneForCreateInput
   createdAt: DateTime
@@ -264,7 +264,7 @@ input UserRelateToOneForCreateInput {
 
 type Category {
   id: ID!
-  name: String
+  name: String!
   purchases(where: PurchaseWhereInput! = {}, orderBy: [PurchaseOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PurchaseWhereUniqueInput): [Purchase!]
   purchasesCount(where: PurchaseWhereInput! = {}): Int
 }
@@ -289,7 +289,7 @@ input CategoryOrderByInput {
 }
 
 input CategoryUpdateInput {
-  name: String
+  name: String!
   purchases: PurchaseRelateToManyForUpdateInput
 }
 
@@ -299,15 +299,15 @@ input CategoryUpdateArgs {
 }
 
 input CategoryCreateInput {
-  name: String
+  name: String! = ""
   purchases: PurchaseRelateToManyForCreateInput
 }
 
 type Card {
   id: ID!
-  name: String
-  bank: String
-  lastFour: String
+  name: String!
+  bank: String!
+  lastFour: String!
   creditCard: Boolean
   notes: String
   purchases(where: PurchaseWhereInput! = {}, orderBy: [PurchaseOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PurchaseWhereUniqueInput): [Purchase!]
@@ -354,9 +354,9 @@ input CardOrderByInput {
 }
 
 input CardUpdateInput {
-  name: String
-  bank: String
-  lastFour: String
+  name: String!
+  bank: String!
+  lastFour: String!
   creditCard: Boolean
   notes: String
   purchases: PurchaseRelateToManyForUpdateInput
@@ -370,9 +370,9 @@ input CardUpdateArgs {
 }
 
 input CardCreateInput {
-  name: String
-  bank: String
-  lastFour: String
+  name: String! = ""
+  bank: String! = ""
+  lastFour: String! = ""
   creditCard: Boolean
   notes: String
   purchases: PurchaseRelateToManyForCreateInput

@@ -2,11 +2,11 @@ import { ApolloProvider } from "@apollo/client";
 import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 
-import { AppLayout } from "../components/AppLayout";
-import { apolloClient } from "../lib/apolloClient";
+import { AppLayout } from "@/components/AppLayout";
 import { ThemeProvider } from "@/components/ThemeProvider";
-
 import "@/css/index.scss";
+import { Toaster } from "@/components/ui/toaster";
+import { apolloClient } from "@/lib/apolloClient";
 
 
 
@@ -26,6 +26,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </AppLayout>
         </ApolloProvider>
+        <Toaster />
       </ThemeProvider>
     </div>
   );

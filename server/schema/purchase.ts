@@ -4,6 +4,8 @@ import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { float, relationship, text, timestamp } from "@keystone-6/core/fields";
 
+import { makeNonNullRef } from "./utils";
+
 
 
 export const Purchase: ListConfig<Lists.Purchase.TypeInfo> = list({
@@ -21,21 +23,26 @@ export const Purchase: ListConfig<Lists.Purchase.TypeInfo> = list({
     date: timestamp({
       defaultValue: "2023-12-30T18:05:29.700Z",
       validation: { isRequired: true },
+      ...makeNonNullRef(),
     }),
 
     description: text({
       validation: { isRequired: true },
       // by adding isIndexed: 'unique', we're saying that no user can have the same
       // email as another user - this may or may not be a good idea for your project,
+      ...makeNonNullRef(),
     }),
 
-    cost: float({ validation: { isRequired: true } }),
+    cost: float({ 
+      validation: { isRequired: true },
+      ...makeNonNullRef(),
+    }),
 
-    total: float({ validation: { isRequired: true } }),
+    total: float({ validation: { isRequired: true }, ...makeNonNullRef() }),
 
     // we can use this field to see what Posts this User has authored
     //   more on that in the Post list below
-    category: relationship({ ref: "Category.purchases" }),
+    category: relationship({ ref: "Category.purchases", ...makeNonNullRef() }),
 
     card: relationship({ ref: "Card.purchases" }),
 

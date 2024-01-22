@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { ThemeToggle } from "../ThemeToggle";
+import { MenuBar } from "../MenuBar";
 
 
 
@@ -10,8 +10,8 @@ interface AppLayoutProps {
 
 export function AppLayout({ children }: Readonly<AppLayoutProps>) {
   return (
-    <div className="box-border">
-      <div className="absolute top-2 right-2"><ThemeToggle /></div>
+    <div className="container box-border">
+      <MenuBar />
       {children}
     </div>
   );

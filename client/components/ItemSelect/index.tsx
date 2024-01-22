@@ -1,52 +1,52 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { ControllerRenderProps } from "react-hook-form";
+import type { Control } from "react-hook-form";
 
 import { LoadingIndicator } from "../LoadingIndicator";
-import { Select, SelectContent, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 
 
-// const zItem = z.object({
-//   id: z.string(),
-//   name: z.string(),
-// });
-
-interface ItemsType {
-  id: string;
-  name?: string | null;
-}
-
-
-interface ItemSelectProps<T> {
-  items: (T & ItemsType)[];
-  field: ControllerRenderProps<{[x: string]: any}, string>;
+interface ItemSelectProps {
+  items: { id: string; name?: string | null; [x: string]: any }[];
+  control: Control<any>;
   loading?: boolean;
 }
 
-export function ItemSelect<T>({ items, field, loading = false }: ItemSelectProps<T>) {
+export function ItemSelect({ items, control, loading = false }: ItemSelectProps) {
   return (
-    <Select
-      onValueChange={field?.onChange}
-      {...field}
-    >
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder={loading ? (<LoadingIndicator />) : "Select a Category"} />
-      </SelectTrigger>
+    <FormField 
+      name="category"
+      control={control}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className="mr-5">Category</FormLabel> 
+          <Select
+            onValueChange={field.onChange}
+            defaultValue={field.value}
+          >
+            <FormControl>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={loading ? (<LoadingIndicator />) : "Select a Category"} />
+              </SelectTrigger>
+            </FormControl>
 
-      <SelectContent position="popper">
-        {items.map((category, index) => (
-          <>
-            <SelectLabel>{index}. </SelectLabel>
-            <SelectItem 
-              className={index % 2 === 0 ? "bg-slate-100 dark:bg-slate-900" : ""}
-              key={category.id} 
-              value={category.id}
-            >
-              {category.name}
-            </SelectItem>
-          </>
-        ))}
-      </SelectContent>
-    </Select>
+            <SelectContent position="popper">
+              {items.map((category, index) => (
+                        
+                <SelectItem 
+                  className={index % 2 === 0 ? "bg-slate-100 dark:bg-slate-900" : ""}
+                  key={category.id} 
+                  value={category.id}
+                >
+                  {category.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <FormMessage />
+                
+        </FormItem>
+      )} />
   );
 }

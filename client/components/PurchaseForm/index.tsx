@@ -1,3 +1,4 @@
+import type { ApolloError } from "@apollo/client";
 import { useMutation, useQuery } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useMemo } from "react";
@@ -6,11 +7,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { DatePicker } from "../DatePicker";
-import { LoadingIndicator } from "../LoadingIndicator";
+import { ItemSelect } from "../ItemSelect";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/useToast";
 import { CreatePurchaseDocument, GetCategoriesDocument, GetPurchasesDocument } from "@/generated/graphql";
@@ -67,11 +68,17 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
         toast({
           title: "Added Purchase",
           description: `${res?.data?.createPurchase?.description}`,
-          duration: 5,
+          duration: 5000,
         });
       })
       .then(() => form.resetField("cost"))
-      .catch((error) => console.error(error.message));
+      .catch((error: ApolloError) => {
+        toast({
+          title: "Error creating purchase",
+          description: `${error.message}`,
+          duration: 5000,
+        });
+      });
   }, [createPurchase, form, toast, totalCalc]);
   
   return (
@@ -96,39 +103,47 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
                   {/* <Input placeholder="Desription" {...field}/> */}
                   <Textarea {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )} />
-          <FormField 
+          {/* <FormField 
             name="category"
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="mr-5">Category</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    {...field}
-                  >
+                <FormLabel className="mr-5">Category</FormLabel> 
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder={loading ? (<LoadingIndicator />) : "Select a Category"} />
                     </SelectTrigger>
+                  </FormControl>
 
-                    <SelectContent position="popper">
-                      {categoryData?.categories?.map((category, index) => (
+                  <SelectContent position="popper">
+                    {categoryData?.categories?.map((category, index) => (
                         
-                        <SelectItem 
-                          className={index % 2 === 0 ? "bg-slate-100 dark:bg-slate-900" : ""}
-                          key={category.id} 
-                          value={category.id}
-                        >
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
+                      <SelectItem 
+                        className={index % 2 === 0 ? "bg-slate-100 dark:bg-slate-900" : ""}
+                        key={category.id} 
+                        value={category.id}
+                      >
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+                
               </FormItem>
-            )} />
+            )} /> */}
+          <ItemSelect 
+            items={categoryData?.categories ?? []}
+            control={form.control}
+            loading={loading}
+          />
           <FormField
             control={form.control}
             name="cost"
@@ -136,6 +151,7 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
               <FormItem className="flex flex-col">
                 <FormLabel>Cost</FormLabel>
                 <Input type="float" placeholder="0" {...field}/>
+                <FormMessage />
               </FormItem>
             )}
           />
