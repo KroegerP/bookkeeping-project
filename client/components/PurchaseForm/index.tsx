@@ -21,7 +21,7 @@ const ROUNDING_NUMBER = 100;
 
 const formSchema = z.object({
   date: z.date(),
-  description: z.string().min(2),
+  description: z.string().min(5),
   cost: z.string(), // Weird form thing going on here
   category: z.string(),
 });
@@ -55,7 +55,10 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
 
   const costWatcher = form.watch("cost");
 
-  const totalCalc = useMemo(() => Math.round((previousTotal * ROUNDING_NUMBER) + (Number.parseFloat(costWatcher ?? "0") * ROUNDING_NUMBER)) / ROUNDING_NUMBER, [previousTotal, costWatcher]);
+  const totalCalc = useMemo(() => 
+    // eslint-disable-next-line max-len
+    Math.round((previousTotal * ROUNDING_NUMBER) + ((Number.parseFloat(costWatcher ?? 0)) * ROUNDING_NUMBER)) / ROUNDING_NUMBER
+  , [previousTotal, costWatcher]);
 
   const onSubmit = useCallback<SubmitHandler<z.infer<typeof formSchema>>>(async (data) => {
     console.log(data);
@@ -123,15 +126,18 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Cost</FormLabel>
-                <Input type="number" step="0.01" placeholder="0" {...field} value={field.value}/>
+                <Input 
+                  type="number" 
+                  step="0.01" 
+                  placeholder="0" 
+                  {...field} 
+                  value={field.value}
+                  // onChange={e => field.onChange(Number.parseFloat(e.target.value))}
+                />
                 <FormMessage />
               </FormItem>
             )}
           />
-          {/* <FormItem className="flex flex-col">
-            <FormLabel>Total</FormLabel>
-            <Input type="number" placeholder="Total" disabled value={totalCalc}/>
-          </FormItem> */}
           <Button type="submit" className="my-4" >Submit</Button>
         </form>
       </Form>
