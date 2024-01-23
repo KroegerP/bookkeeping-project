@@ -59,23 +59,3 @@ export function TableActions({ row }: Readonly<TableActionsProps>) {
     </DropdownMenu>
   );
 }
-
-//     <Select>
-//       <SelectTriggerCustomIcon iconOverride={<DotsVerticalIcon />}></SelectTriggerCustomIcon>
-//       <SelectContent>
-//         <SelectGroup title={`${row.getValue("description")}`}>
-//           <SelectItem value="edit">
-//             <div className="flex flex-row justify-between">
-//               <EditIcon size="20px" /> <div className="ml-1">Edit</div>
-//             </div>
-//           </SelectItem>
-//           <SelectItem value="delete">
-//             <div className="flex flex-row justify-between">
-//               <Trash size="20px" /> <div className="ml-1">Delete</div>
-//             </div>
-//           </SelectItem>
-//         </SelectGroup>
-//       </SelectContent>
-//     </Select>
-//   );
-// }
