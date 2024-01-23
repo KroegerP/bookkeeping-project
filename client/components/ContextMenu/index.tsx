@@ -1,7 +1,7 @@
 import type { Row } from "@tanstack/table-core";
 import type { ReactNode } from "react";
 
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "../ui/contextMenu";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuPortal, ContextMenuTrigger } from "../ui/contextMenu";
 
 
 
@@ -17,17 +17,19 @@ export function PurchaseContextMenu({ row, children }: Readonly<Temp>) {
   return (
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
-      <ContextMenuContent>
-        <ContextMenuItem disabled>{row.getValue("description")}</ContextMenuItem>
-        <ContextMenuItem>Edit</ContextMenuItem>
-        <ContextMenuItem>Delete</ContextMenuItem>
-      </ContextMenuContent>
+      <ContextMenuPortal>
+        <ContextMenuContent>
+          <ContextMenuItem disabled>{row.getValue("description")}</ContextMenuItem>
+          <ContextMenuItem>Edit</ContextMenuItem>
+          <ContextMenuItem>Delete</ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenuPortal>
     </ContextMenu>
   );
 }
 
 export function OnContextMenuElement({ row }: Readonly<Temp>) {
-  console.log(row); 
+  console.log("HI", row); 
 
   return (
     <div>HI</div>

@@ -1,7 +1,7 @@
 import type { ApolloError } from "@apollo/client";
 import { useMutation, useQuery } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/useToast";
-import { CreatePurchaseDocument, GetCategoriesDocument, GetPurchasesDocument } from "@/generated/graphql";
+import { CreatePurchaseDocument, GetCategoriesDocument, GetMostRecentPurchaseDocument, GetPurchasesDocument } from "@/generated/graphql";
 
 
 
@@ -36,14 +36,23 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
 
   const { data: categoryData, loading } = useQuery(GetCategoriesDocument);
 
-  const [createPurchase] = useMutation(CreatePurchaseDocument, { refetchQueries: [GetPurchasesDocument] });
+  const [createPurchase] = useMutation(CreatePurchaseDocument, {
+    refetchQueries: [GetPurchasesDocument, GetMostRecentPurchaseDocument],
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       date: new Date(),
+      description: "",
+      category: "",
+      cost: "",
     },
   });
+
+  useEffect(() => {
+    form.reset();
+  }, [form, form.formState.isSubmitSuccessful]);
 
   const costWatcher = form.watch("cost");
 
@@ -64,14 +73,13 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
         },
       },
     } })
-      .then((res) => {
+      .then(({ data }) => {
         toast({
           title: "Added Purchase",
-          description: `${res?.data?.createPurchase?.description}`,
+          description: `${data?.createPurchase?.description}-${new Date(data?.createPurchase?.date ?? "0").toISOString()}`,
           duration: 5000,
         });
-      })
-      .then(() => form.resetField("cost"))
+      })      
       .catch((error: ApolloError) => {
         toast({
           title: "Error creating purchase",
@@ -82,7 +90,7 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
   }, [createPurchase, form, toast, totalCalc]);
   
   return (
-    <div className="p-4 max-h-fit h-fit bg-slate-400 dark:bg-slate-500 rounded">
+    <div className="p-4 bg-slate-400 dark:bg-slate-500 rounded">
       <h1 className="mb-4">Enter Data</h1>
       <Form {...form}>
         <form 
@@ -100,45 +108,11 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
               <FormItem>
                 <FormLabel className="mr-5">Description</FormLabel>
                 <FormControl>
-                  {/* <Input placeholder="Desription" {...field}/> */}
-                  <Textarea {...field} />
+                  <Textarea {...field} value={field.value} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )} />
-          {/* <FormField 
-            name="category"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="mr-5">Category</FormLabel> 
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={loading ? (<LoadingIndicator />) : "Select a Category"} />
-                    </SelectTrigger>
-                  </FormControl>
-
-                  <SelectContent position="popper">
-                    {categoryData?.categories?.map((category, index) => (
-                        
-                      <SelectItem 
-                        className={index % 2 === 0 ? "bg-slate-100 dark:bg-slate-900" : ""}
-                        key={category.id} 
-                        value={category.id}
-                      >
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-                
-              </FormItem>
-            )} /> */}
           <ItemSelect 
             items={categoryData?.categories ?? []}
             control={form.control}
@@ -150,15 +124,15 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Cost</FormLabel>
-                <Input type="float" placeholder="0" {...field}/>
+                <Input type="float" placeholder="0" {...field} value={field.value}/>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormItem className="flex flex-col">
+          {/* <FormItem className="flex flex-col">
             <FormLabel>Total</FormLabel>
             <Input type="number" placeholder="Total" disabled value={totalCalc}/>
-          </FormItem>
+          </FormItem> */}
           <Button type="submit" className="my-4" >Submit</Button>
         </form>
       </Form>

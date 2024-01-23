@@ -25,7 +25,7 @@ export function PurchaseTable() {
   const purchaseData = useMemo(() => data?.purchases ?? [], [data]);
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-8">
       {loading ? <LoadingIndicator className="w-full flex justify-center"/> 
         : <DataTable columns={columns} data={purchaseData} />}
     </div>
