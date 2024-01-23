@@ -24,7 +24,7 @@ const formSchema = z.object({
   description: z.string().min(5),
   cost: z.string(), // Weird form thing going on here
   category: z.string(),
-});
+}).strict();
 
 interface PurchaseFormProps {
   previousTotal: number;
@@ -67,7 +67,8 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
         ...data,
         cost: Number.parseFloat(data.cost),
         date: data.date.toISOString(),
-        total: totalCalc,
+        total: Math.round((previousTotal * ROUNDING_NUMBER) +
+          ((Number.parseFloat(data.cost)) * ROUNDING_NUMBER)) / ROUNDING_NUMBER,
         category: {
           connect: {
             id: data.category,

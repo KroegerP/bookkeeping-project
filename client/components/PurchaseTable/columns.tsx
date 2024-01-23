@@ -19,7 +19,7 @@ export const columns: ColumnDef<PurchaseBasicFragment>[] = [
       const cost: string | undefined = cellProps.row.getValue("cost");
 
       return (
-        <div className={`${cost?.toString().startsWith("-") ? "text-red-500" : "text-green-400"}`}>
+        <div className={`${cost?.toString().startsWith("-") ? "text-red-800 dark:text-red-400" : "text-green-700 dark:text-green-400"}`}>
           {cost ?? "NO DATA"}
         </div>
       );

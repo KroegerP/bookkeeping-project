@@ -1,12 +1,14 @@
 import { useQuery } from "@apollo/client";
 import type { NextPage } from "next";
 
+import { LoadingIndicator } from "@/components/LoadingIndicator";
+import { PurchaseChart } from "@/components/PurchaseChart";
 import { GetPurchasesDocument, OrderDirection } from "@/generated/graphql";
 
 
 
 const ChartsPage: NextPage = () => {
-  const { data } = useQuery(GetPurchasesDocument, {
+  const { data, loading } = useQuery(GetPurchasesDocument, {
     variables: {
       orderBy: [
         { createdAt: OrderDirection.Desc },
@@ -15,12 +17,9 @@ const ChartsPage: NextPage = () => {
     },
   });
 
-  console.log(data);
-
   return (
-    <div className="flex justify-center align-middle box-border w-full h-screen bg-slate-700">
-      <div className="w-3/4 flex justify-center align-middle">
-      </div>
+    <div className="flex flex-col justify-center bg-slate-700">
+      {loading ? <LoadingIndicator /> : <PurchaseChart data={data?.purchases ?? []}/>}
     </div>
   );
 };

@@ -17,7 +17,11 @@ const Home = () => {
     <div className="w-full flex justify-center items-start">
       <div className="flex flex-col mt-8">
         <div className="mb-12">
-          <TotalDisplay total={previousTotal} refetch={() => refetch()} loading={loading}/>
+          <TotalDisplay 
+            total={previousTotal} 
+            refetch={() => refetch()} 
+            loading={loading}
+          />
         </div>
         <PurchseForm previousTotal={previousTotal} />
       </div>
