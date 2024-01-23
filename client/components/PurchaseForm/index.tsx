@@ -11,7 +11,6 @@ import { ItemSelect } from "../ItemSelect";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/useToast";
 import { CreatePurchaseDocument, GetCategoriesDocument, GetMostRecentPurchaseDocument, GetPurchasesDocument } from "@/generated/graphql";
@@ -76,18 +75,18 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
       .then(({ data }) => {
         toast({
           title: "Added Purchase",
-          description: `${data?.createPurchase?.description}-${new Date(data?.createPurchase?.date ?? "0").toISOString()}`,
-          duration: 5000,
+          description: `${data?.createPurchase?.description} - ${new Date(data?.createPurchase?.date ?? "0").toDateString()}`,
+          duration: 3,
         });
       })      
       .catch((error: ApolloError) => {
         toast({
           title: "Error creating purchase",
           description: `${error.message}`,
-          duration: 5000,
+          duration: 5,
         });
       });
-  }, [createPurchase, form, toast, totalCalc]);
+  }, [createPurchase, toast, totalCalc]);
   
   return (
     <div className="p-4 bg-slate-400 dark:bg-slate-500 rounded">
@@ -124,7 +123,7 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Cost</FormLabel>
-                <Input type="float" placeholder="0" {...field} value={field.value}/>
+                <Input type="number" step="0.01" placeholder="0" {...field} value={field.value}/>
                 <FormMessage />
               </FormItem>
             )}
