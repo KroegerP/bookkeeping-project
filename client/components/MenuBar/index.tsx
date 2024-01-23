@@ -13,7 +13,7 @@ export function MenuBar() {
         <MenubarContent>
           <MenubarItem><Link href={"/"}>Home</Link></MenubarItem>
           <MenubarSeparator />
-          <MenubarItem><Link href={"/Example"}>Charts</Link></MenubarItem>
+          <MenubarItem><Link href={"/charts"}>Charts</Link></MenubarItem>
           <MenubarSeparator />
         </MenubarContent>
       </MenubarMenu>
