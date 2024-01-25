@@ -31,6 +31,7 @@ export const configuration = config({
     port: 5000,
     cors: { origin: ["http://localhost:3000"], credentials: true },
   },
+  // extendGraphqlSchema: (schema: => {}) 
 });
 
 export default withAuth(

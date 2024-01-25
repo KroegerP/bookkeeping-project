@@ -213,6 +213,7 @@ var configuration = (0, import_core5.config)({
     port: 5e3,
     cors: { origin: ["http://localhost:3000"], credentials: true }
   }
+  // extendGraphqlSchema: (schema: => {}) 
 });
 var keystone_default = withAuth(
   configuration
