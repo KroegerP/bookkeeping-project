@@ -26,9 +26,23 @@ export const columns: ColumnDef<PurchaseBasicFragment>[] = [
     },
   },
   {
+    accessorKey: "total",
+    header: "Total",
+    size: 150,
+    cell: (cellProps) => {
+      const total: string | undefined = cellProps.row.getValue("total");
+
+      return (
+        <div className={`${total?.toString().startsWith("-") ? "text-red-800 dark:text-red-400" : "text-green-700 dark:text-green-400"}`}>
+          {total}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "date",
     header: "Date",
-    size: 300,
+    size: 100,
     cell: (cellProps) => {
       const date = new Date(cellProps.row.getValue("date"));
 

@@ -22,12 +22,12 @@ export function PurchaseTable() {
     },
   });
 
-  const purchaseData = useMemo(() => data?.purchases ?? [], [data]);
+  const purchaseData = useMemo(() => [...data?.purchases ?? []], [data]);
 
   return (
     <div className="container mx-auto py-8">
       {loading ? <LoadingIndicator className="w-full flex justify-center"/> 
-        : <DataTable columns={columns} data={purchaseData} />}
+        : <DataTable columns={columns} data={purchaseData.sort((a, b) => (a.createdAt ?? "0") < (b.createdAt ?? "0") ? 1 : -1)} />}
     </div>
   );
 }
