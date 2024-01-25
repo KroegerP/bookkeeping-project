@@ -2,6 +2,8 @@
 
 **/generated/**
 
+database/
+
 .env
 
 server/seedData/purchasesData/*.txt
