@@ -447,6 +447,7 @@ type Query {
   cardsCount(where: CardWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
+  getOrderedPurchases(cutOffDate: DateTime): Purchase
 }
 
 union AuthenticatedItem = User

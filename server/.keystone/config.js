@@ -24,7 +24,7 @@ __export(keystone_exports, {
   default: () => keystone_default
 });
 module.exports = __toCommonJS(keystone_exports);
-var import_core5 = require("@keystone-6/core");
+var import_core6 = require("@keystone-6/core");
 
 // auth.ts
 var import_crypto = require("crypto");
@@ -59,8 +59,43 @@ var session = (0, import_session.statelessSessions)({
   secret: sessionSecret
 });
 
-// schema/card.ts
+// graphql/index.ts
 var import_core = require("@keystone-6/core");
+function sortItems(a, b) {
+  if (a.createdAt === b.createdAt || !a.createdAt || !b.createdAt) {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  }
+  return a.createdAt > b.createdAt ? 1 : -1;
+}
+var extendGraphqlSchema = import_core.graphql.extend((base) => {
+  return {
+    query: {
+      getOrderedPurchases: import_core.graphql.field({
+        type: base.object("Purchase"),
+        args: {
+          cutOffDate: import_core.graphql.arg({ type: import_core.graphql.DateTime })
+        },
+        async resolve(source, { cutOffDate }, context) {
+          const initialSort = await context.db.Purchase.findMany({
+            where: cutOffDate ? {
+              date: {
+                lte: cutOffDate.toISOString()
+              }
+            } : void 0,
+            orderBy: {
+              createdAt: "desc" /* Desc */
+            }
+          });
+          const finalSort = initialSort.toSorted(sortItems);
+          return finalSort;
+        }
+      })
+    }
+  };
+});
+
+// schema/card.ts
+var import_core2 = require("@keystone-6/core");
 var import_access = require("@keystone-6/core/access");
 var import_fields = require("@keystone-6/core/fields");
 
@@ -78,7 +113,7 @@ function makeNonNullRef() {
 }
 
 // schema/card.ts
-var Card = (0, import_core.list)({
+var Card = (0, import_core2.list)({
   access: import_access.allowAll,
   fields: {
     name: (0, import_fields.text)({ validation: { isRequired: true }, isIndexed: "unique", ...makeNonNullRef() }),
@@ -98,10 +133,10 @@ var Card = (0, import_core.list)({
 });
 
 // schema/category.ts
-var import_core2 = require("@keystone-6/core");
+var import_core3 = require("@keystone-6/core");
 var import_access2 = require("@keystone-6/core/access");
 var import_fields2 = require("@keystone-6/core/fields");
-var Category = (0, import_core2.list)({
+var Category = (0, import_core3.list)({
   // WARNING
   //   for this starter project, anyone can create, query, update and delete anything
   //   if you want to prevent random people on the internet from accessing your data,
@@ -115,10 +150,10 @@ var Category = (0, import_core2.list)({
 });
 
 // schema/purchase.ts
-var import_core3 = require("@keystone-6/core");
+var import_core4 = require("@keystone-6/core");
 var import_access3 = require("@keystone-6/core/access");
 var import_fields3 = require("@keystone-6/core/fields");
-var Purchase = (0, import_core3.list)({
+var Purchase = (0, import_core4.list)({
   // WARNING
   //   for this starter project, anyone can create, query, update and delete anything
   //   if you want to prevent random people on the internet from accessing your data,
@@ -157,10 +192,10 @@ var Purchase = (0, import_core3.list)({
 });
 
 // schema/user.ts
-var import_core4 = require("@keystone-6/core");
+var import_core5 = require("@keystone-6/core");
 var import_access4 = require("@keystone-6/core/access");
 var import_fields4 = require("@keystone-6/core/fields");
-var User = (0, import_core4.list)({
+var User = (0, import_core5.list)({
   // WARNING
   //   for this starter project, anyone can create, query, update and delete anything
   //   if you want to prevent random people on the internet from accessing your data,
@@ -195,7 +230,7 @@ var lists = {
 };
 
 // keystone.ts
-var configuration = (0, import_core5.config)({
+var configuration = (0, import_core6.config)({
   db: {
     provider: "postgresql",
     url: "postgres://postgres:test@localhost:5432",
@@ -212,8 +247,8 @@ var configuration = (0, import_core5.config)({
   server: {
     port: 5e3,
     cors: { origin: ["http://localhost:3000"], credentials: true }
-  }
-  // extendGraphqlSchema: (schema: => {}) 
+  },
+  extendGraphqlSchema
 });
 var keystone_default = withAuth(
   configuration

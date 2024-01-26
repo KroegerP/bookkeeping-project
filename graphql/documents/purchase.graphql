@@ -12,8 +12,23 @@ fragment PurchaseBasic on Purchase {
   createdAt
 }
 
+fragment PurchaseNoCategory on Purchase {
+  id
+  date
+  description
+  cost
+  total
+  createdAt
+}
+
 query GetPurchases($where: PurchaseWhereInput, $orderBy: [PurchaseOrderByInput!]!, $take: Int) {
   purchases(where: $where, orderBy: $orderBy, take: $take) {
+   ...PurchaseBasic
+  }
+}
+
+query GetOrderedPurchases($cutOffDate: DateTime) {
+  getOrderedPurchases(cutOffDate: $cutOffDate) {
    ...PurchaseBasic
   }
 }

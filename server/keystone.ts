@@ -9,6 +9,7 @@ import { config } from "@keystone-6/core";
 
 // to keep this file tidy, we define our schema in a different file
 import { withAuth, session } from "./auth";
+import { extendGraphqlSchema } from "./graphql";
 import { lists } from "./schema";
 
 // authentication is configured separately here too, but you might move this elsewhere
@@ -31,7 +32,7 @@ export const configuration = config({
     port: 5000,
     cors: { origin: ["http://localhost:3000"], credentials: true },
   },
-  // extendGraphqlSchema: (schema: => {}) 
+  extendGraphqlSchema: extendGraphqlSchema,
 });
 
 export default withAuth(

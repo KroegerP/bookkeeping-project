@@ -51,7 +51,7 @@ export function TotalDisplay({ total, refetch, loading }: Readonly<TotalDisplayP
         </Button>
       </div>
       <div className="flex items-center">
-        <div className={`${colorClass} text-[${fontSize}]`}>$</div>
+        <div className={`${colorClass} text-[24px]`}>$</div>
         {totalForRender}
       </div>
     </div>
