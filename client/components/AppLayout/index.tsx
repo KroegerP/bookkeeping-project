@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { MenuBar } from "../MenuBar";
+import { NaviagationBar } from "../NavigationBar";
 
 
 
@@ -11,9 +11,11 @@ interface AppLayoutProps {
 
 export function AppLayout({ className, children }: Readonly<AppLayoutProps>) {
   return (
-    <div className={`${className} container box-border h-screen`}>
-      <MenuBar />
-      {children}
+    <div className={`${className} h-screen`}>
+      <NaviagationBar />
+      <div className="container box-border">
+        {children}
+      </div>
     </div>
   );
 }

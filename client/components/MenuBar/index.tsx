@@ -1,3 +1,4 @@
+import { GanttChartSquare, Home, LineChart } from "lucide-react";
 import Link from "next/link";
 
 import { ThemeToggle } from "../ThemeToggle";
@@ -11,10 +12,26 @@ export function MenuBar() {
       <MenubarMenu>
         <MenubarTrigger>Pages</MenubarTrigger>
         <MenubarContent>
-          <MenubarItem><Link href={"/"}>Home</Link></MenubarItem>
+          <MenubarItem>
+            <Link href={"/"} className="flex gap-2">
+              <Home size="20"/>
+              Home
+            </Link>
+          </MenubarItem>
           <MenubarSeparator />
-          <MenubarItem><Link href={"/charts"}>Charts</Link></MenubarItem>
+          <MenubarItem>
+            <Link href={"/charts"} className="flex gap-2">
+              <LineChart size="20" />
+              Charts
+            </Link>
+          </MenubarItem>
           <MenubarSeparator />
+          <MenubarItem>
+            <Link href={"/summary"} className="flex gap-2">
+              <GanttChartSquare size="20"/>
+              Summary
+            </Link>
+          </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu>

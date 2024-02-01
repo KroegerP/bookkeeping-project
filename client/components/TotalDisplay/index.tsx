@@ -40,11 +40,11 @@ export function TotalDisplay({ total, refetch, loading }: Readonly<TotalDisplayP
       <div className="relative bottom-12 right-32">
         <p className="absolute text-sm">Total: </p>
       </div>
-      <div className="relative bottom-[3rem] left-[5.25rem]">
+      <div className="relative bottom-[3rem] left-[5.75rem]">
         <Button 
           className="absolute" 
           variant="defaultDark" 
-          size="sm" 
+          size="icon" 
           onClick={refetch}
         >
           <RefreshCcw color="white" />
