@@ -5,6 +5,7 @@
   "author": "pkroeger <peter14mail@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "prepare": "husky",
     "postinstall": "run-s install:*",
     "compile": "run-s compile:client compile:server",
     "compile:client": "cd client && yarn compile",
@@ -28,6 +29,7 @@
     "@typescript-eslint/eslint-plugin": "^6.16.0",
     "@typescript-eslint/parser": "^6.16.0",
     "eslint": "^8.56.0",
+    "husky": "^9.0.10",
     "npm-run-all": "^4.1.5",
     "typescript": "^5.3.3"
   }

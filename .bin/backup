@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Check if the correct number of arguments is provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <username> <password>"
+    exit 1
+fi
+
+# Database connection parameters
+DB_HOST="localhost"
+DB_PORT="5432"
+DB_NAME="your_database_name"  # Replace with your actual database name
+
+# Get username and password from command line arguments
+DB_USER="$1"
+DB_PASSWORD="$2"
+
+# Output file for the dump
+DUMP_FILE="database_dump.sql"
+
+# Perform the database dump using pg_dump
+pg_dump -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -W --password=$DB_PASSWORD -F c -b -v -f $DUMP_FILE
+
+# Check the exit status of pg_dump
+if [ $? -eq 0 ]; then
+    echo "Database dump created successfully. File: $DUMP_FILE"
+else
+    echo "Error creating database dump. Please check the provided credentials and try again."
+fi
