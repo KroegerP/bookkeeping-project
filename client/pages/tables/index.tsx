@@ -4,8 +4,8 @@ import type { NextPage } from "next";
 
 const TablesPage: NextPage = () => {
   return (
-    <div className="bg-slate-500">Test</div>
+    <div className="flex justify-center items-center bg-slate-500">Tables Page!</div>
   );
-}
+};
 
 export default TablesPage;

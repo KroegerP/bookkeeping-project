@@ -1,7 +1,7 @@
 import type { ApolloError } from "@apollo/client";
 import { useMutation, useQuery } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -53,13 +53,6 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
     form.reset();
   }, [form, form.formState.isSubmitSuccessful]);
 
-  const costWatcher = form.watch("cost");
-
-  const totalCalc = useMemo(() => 
-    // eslint-disable-next-line max-len
-    Math.round((previousTotal * ROUNDING_NUMBER) + ((Number.parseFloat(costWatcher ?? 0)) * ROUNDING_NUMBER)) / ROUNDING_NUMBER
-  , [previousTotal, costWatcher]);
-
   const onSubmit = useCallback<SubmitHandler<z.infer<typeof formSchema>>>(async (data) => {
     console.log(data);
     createPurchase({ variables: {
@@ -90,7 +83,7 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
           duration: 5,
         });
       });
-  }, [createPurchase, toast, totalCalc]);
+  }, [createPurchase, previousTotal, toast]);
   
   return (
     <div className="p-4 bg-slate-400 dark:bg-slate-500 rounded">
