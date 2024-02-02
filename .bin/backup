@@ -9,17 +9,19 @@ fi
 # Database connection parameters
 DB_HOST="localhost"
 DB_PORT="5432"
-DB_NAME="your_database_name"  # Replace with your actual database name
+DB_NAME="postgres"  # Replace with your actual database name
 
 # Get username and password from command line arguments
 DB_USER="$1"
 DB_PASSWORD="$2"
 
-# Output file for the dump
-DUMP_FILE="database_dump.sql"
+TODAY=$(date --iso-8601)
 
+# Output file for the dump
+BACKDIR="./backups"
+DUMP_FILE=$BACKDIR"/dump-"$TODAY".sql"
 # Perform the database dump using pg_dump
-pg_dump -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -W --password=$DB_PASSWORD -F c -b -v -f $DUMP_FILE
+pg_dump -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME --column-inserts -f $DUMP_FILE
 
 # Check the exit status of pg_dump
 if [ $? -eq 0 ]; then
