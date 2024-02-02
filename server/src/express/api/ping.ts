@@ -1,11 +1,20 @@
 import type { Request, Response } from "express";
 /*
-  This example route handler creates a test brand and returns its ID
+  This example route handler finds the first user and returns their name
 */
 
 export async function postPing(req: Request, res: Response) {
-  // const { context } = req;
+  const { context } = req;
 
+  const data = await context.db.User.findOne({
+    where: {
+      id: "1",
+    },
+  });
 
-  res.json("Pong");
+  if (data) {
+    res.json(data.name);  
+  } else {
+    res.json("Pong");
+  }
 }

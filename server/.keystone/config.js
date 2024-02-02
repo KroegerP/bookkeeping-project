@@ -67,7 +67,17 @@ var import_express = require("express");
 
 // src/express/api/ping.ts
 async function postPing(req, res) {
-  res.json("Pong");
+  const { context } = req;
+  const data = await context.db.User.findOne({
+    where: {
+      id: "1"
+    }
+  });
+  if (data) {
+    res.json(data.name);
+  } else {
+    res.json("Pong");
+  }
 }
 
 // src/express/utils.ts
