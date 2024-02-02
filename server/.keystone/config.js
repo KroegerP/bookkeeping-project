@@ -59,6 +59,46 @@ var session = (0, import_session.statelessSessions)({
   secret: sessionSecret
 });
 
+// src/express/index.ts
+var import_express2 = require("express");
+
+// src/express/api/index.ts
+var import_express = require("express");
+
+// src/express/api/ping.ts
+async function postPing(req, res) {
+  res.json("Pong");
+}
+
+// src/express/utils.ts
+function makeContextMiddleware(context) {
+  const middleware = async (req, res, next) => {
+    req.context = await context.withRequest(req, res);
+    next();
+  };
+  return middleware;
+}
+function asyncMiddleware(fn) {
+  return (req, res, next) => {
+    fn(req, res, next).catch(next);
+  };
+}
+
+// src/express/api/index.ts
+async function createApiRouter() {
+  const apiRouter = (0, import_express.Router)();
+  apiRouter.post("/ping", asyncMiddleware(postPing));
+  return apiRouter;
+}
+
+// src/express/index.ts
+async function extendExpressApp(app, context) {
+  app.use((0, import_express2.json)());
+  app.get("/status", (_, res) => res.send("Ready"));
+  const apiRouter = await createApiRouter();
+  app.use("/api", makeContextMiddleware(context), apiRouter);
+}
+
 // src/graphql/index.ts
 var import_core = require("@keystone-6/core");
 function sortItems(a, b) {
@@ -246,7 +286,7 @@ var configuration = (0, import_core6.config)({
   session,
   server: {
     port: 5e3,
-    cors: { origin: ["http://localhost:3000"], credentials: true }
+    extendExpressApp
   },
   extendGraphqlSchema
 });
