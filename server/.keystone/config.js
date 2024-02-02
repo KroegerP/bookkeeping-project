@@ -59,7 +59,7 @@ var session = (0, import_session.statelessSessions)({
   secret: sessionSecret
 });
 
-// graphql/index.ts
+// src/graphql/index.ts
 var import_core = require("@keystone-6/core");
 function sortItems(a, b) {
   if (a.createdAt === b.createdAt || !a.createdAt || !b.createdAt) {
@@ -94,12 +94,12 @@ var extendGraphqlSchema = import_core.graphql.extend((base) => {
   };
 });
 
-// schema/card.ts
+// src/schema/card.ts
 var import_core2 = require("@keystone-6/core");
 var import_access = require("@keystone-6/core/access");
 var import_fields = require("@keystone-6/core/fields");
 
-// schema/utils/index.ts
+// src/schema/utils/index.ts
 function makeNonNullRef() {
   return {
     graphql: {
@@ -112,7 +112,7 @@ function makeNonNullRef() {
   };
 }
 
-// schema/card.ts
+// src/schema/card.ts
 var Card = (0, import_core2.list)({
   access: import_access.allowAll,
   fields: {
@@ -132,7 +132,7 @@ var Card = (0, import_core2.list)({
   }
 });
 
-// schema/category.ts
+// src/schema/category.ts
 var import_core3 = require("@keystone-6/core");
 var import_access2 = require("@keystone-6/core/access");
 var import_fields2 = require("@keystone-6/core/fields");
@@ -149,7 +149,7 @@ var Category = (0, import_core3.list)({
   }
 });
 
-// schema/purchase.ts
+// src/schema/purchase.ts
 var import_core4 = require("@keystone-6/core");
 var import_access3 = require("@keystone-6/core/access");
 var import_fields3 = require("@keystone-6/core/fields");
@@ -191,7 +191,7 @@ var Purchase = (0, import_core4.list)({
   }
 });
 
-// schema/user.ts
+// src/schema/user.ts
 var import_core5 = require("@keystone-6/core");
 var import_access4 = require("@keystone-6/core/access");
 var import_fields4 = require("@keystone-6/core/fields");
@@ -221,7 +221,7 @@ var User = (0, import_core5.list)({
   }
 });
 
-// schema/index.ts
+// src/schema/index.ts
 var lists = {
   User,
   Purchase,

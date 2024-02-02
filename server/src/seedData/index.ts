@@ -4,7 +4,7 @@ import { getContext } from "@keystone-6/core/context";
 
 import { category } from "./category";
 import { resetSequence } from "./utils";
-import { configuration } from "../keystone";
+import { configuration } from "../../keystone";
 
  
 

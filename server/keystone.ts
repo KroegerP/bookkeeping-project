@@ -9,8 +9,8 @@ import { config } from "@keystone-6/core";
 
 // to keep this file tidy, we define our schema in a different file
 import { withAuth, session } from "./auth";
-import { extendGraphqlSchema } from "./graphql";
-import { lists } from "./schema";
+import { extendGraphqlSchema } from "./src/graphql";
+import { lists } from "./src/schema";
 
 // authentication is configured separately here too, but you might move this elsewhere
 // when you write your list-level access control functions, as they typically rely on session data
