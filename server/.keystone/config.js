@@ -296,6 +296,7 @@ var configuration = (0, import_core6.config)({
   session,
   server: {
     port: 5e3,
+    cors: { origin: "*" },
     extendExpressApp
   },
   extendGraphqlSchema

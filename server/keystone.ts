@@ -31,6 +31,7 @@ export const configuration = config({
   session,
   server: {
     port: 5000,
+    cors: { origin: "*", },
     extendExpressApp: extendExpressApp,
   },
   extendGraphqlSchema: extendGraphqlSchema,
