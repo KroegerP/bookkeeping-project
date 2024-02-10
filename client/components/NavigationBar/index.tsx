@@ -12,7 +12,7 @@ export function NaviagationBar() {
   return (
     <NavigationMenu>
       <NavigationMenuList className="w-screen justify-start p-1 bg-blue-600 text-white dark:text-black">
-        <h1 className="mx-20 text-2xl">
+        <h1 className="mx-[2%] text-2xl">
           Peter&apos;s Personal Site
         </h1>
         <NavigationMenuItem>
