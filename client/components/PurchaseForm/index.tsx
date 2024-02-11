@@ -22,7 +22,7 @@ const ROUNDING_NUMBER = 100;
 
 const formSchema = z.object({
   date: z.date(),
-  description: z.string().min(5),
+  description: z.string().min(3),
   cost: z.string(), // Weird form thing going on here
   category: z.string(),
 }).strict();

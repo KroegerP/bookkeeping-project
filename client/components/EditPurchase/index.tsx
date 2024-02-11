@@ -12,7 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import type { Purchase } from "@/generated/graphql";
-import { UpdatePurchaseDocument  } from "@/generated/graphql";
+import { GetPurchasesDocument, UpdatePurchaseDocument  } from "@/generated/graphql";
 import { useGetCategories } from "@/hooks";
 
 
@@ -32,7 +32,7 @@ interface EditPurchaseDialogProps {
 export function EditPurchaseDialog({ purchase, onCancel }: Readonly<EditPurchaseDialogProps>) {
   const { categories, loading } = useGetCategories();
 
-  const [updatePurchase] = useMutation(UpdatePurchaseDocument);
+  const [updatePurchase] = useMutation(UpdatePurchaseDocument, { refetchQueries: [GetPurchasesDocument] });
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,10 +46,11 @@ export function EditPurchaseDialog({ purchase, onCancel }: Readonly<EditPurchase
   const onSubmit = useCallback(() => {
     const data = form.getValues();
     console.log(data);
+    const newCost = Number.parseFloat(data.cost);
 
     let newTotal = purchase.total;
-    if (purchase.cost != data.cost) {
-      newTotal = purchase.total + (data.cost - purchase.cost);
+    if (purchase.cost != newCost) {
+      newTotal = purchase.total + (newCost - purchase.cost);
     }
 
     updatePurchase({
@@ -59,7 +60,7 @@ export function EditPurchaseDialog({ purchase, onCancel }: Readonly<EditPurchase
         },
         data: {
           date: data.date.toISOString(),
-          cost: data.cost,
+          cost: newCost,
           description: data.description,
           total: newTotal,
           category: {
@@ -69,8 +70,8 @@ export function EditPurchaseDialog({ purchase, onCancel }: Readonly<EditPurchase
           },
         },
       },
-    });
-  }, [form, purchase.cost, purchase.id, purchase.total, updatePurchase]);
+    }).then(onCancel);
+  }, [form, onCancel, purchase.cost, purchase.id, purchase.total, updatePurchase]);
 
   return (
     <DialogContent>
