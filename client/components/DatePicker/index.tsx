@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import { useState } from "react";
 import type { Control } from "react-hook-form";
 
 import { cn } from "../../lib/utils";
@@ -17,6 +18,8 @@ interface DatePickerProps {
 }
 
 export function DatePicker({ control, title }: DatePickerProps) {
+  const [open, setOpen] = useState(false);
+
   return (
     <FormField
       control={control}
@@ -24,7 +27,7 @@ export function DatePicker({ control, title }: DatePickerProps) {
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel>{title}</FormLabel>
-          <Popover>
+          <Popover open={open}>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
@@ -33,6 +36,7 @@ export function DatePicker({ control, title }: DatePickerProps) {
                     "w-[240px] pl-3 text-left font-normal",
                     !field.value && "text-muted-foreground",
                   )}
+                  onClick={() => setOpen((prev) => !prev)}
                 >
                   {field.value ? (
                     format(field.value, "PPP")
@@ -47,7 +51,7 @@ export function DatePicker({ control, title }: DatePickerProps) {
               <Calendar
                 mode="single"
                 selected={field.value}
-                onSelect={field.onChange}
+                onSelect={(e) => { field.onChange(e); setOpen(false); }}
                 disabled={(date) =>
                   date > new Date() || date < new Date("1900-01-01")
                 }
