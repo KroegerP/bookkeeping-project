@@ -287,8 +287,6 @@ var configuration = (0, import_core6.config)({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onConnect: async (context) => {
     },
-    // Optional advanced configuration
-    enableLogging: true,
     idField: { kind: "autoincrement" },
     shadowDatabaseUrl: "postgres://postgres:test@localhost:5432/shadowdb"
   },

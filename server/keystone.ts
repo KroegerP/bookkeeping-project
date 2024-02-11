@@ -22,8 +22,6 @@ export const configuration = config({
     url: "postgres://postgres:test@localhost:5432",
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onConnect: async (context) => { /* ... */ },
-    // Optional advanced configuration
-    enableLogging: true,
     idField: { kind: "autoincrement" },
     shadowDatabaseUrl: "postgres://postgres:test@localhost:5432/shadowdb",
   },
@@ -31,7 +29,7 @@ export const configuration = config({
   session,
   server: {
     port: 5000,
-    cors: { origin: "*", },
+    cors: { origin: "*" },
     extendExpressApp: extendExpressApp,
   },
   extendGraphqlSchema: extendGraphqlSchema,
