@@ -1,5 +1,5 @@
 import type { ApolloError } from "@apollo/client";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect } from "react";
 import type { SubmitHandler } from "react-hook-form";
@@ -13,7 +13,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/useToast";
-import { CreatePurchaseDocument, GetCategoriesDocument, GetMostRecentPurchaseDocument, GetPurchasesDocument } from "@/generated/graphql";
+import { CreatePurchaseDocument, GetMostRecentPurchaseDocument, GetPurchasesDocument } from "@/generated/graphql";
+import { useGetCategories } from "@/hooks";
 
 
 
@@ -21,7 +22,7 @@ const ROUNDING_NUMBER = 100;
 
 const formSchema = z.object({
   date: z.date(),
-  description: z.string().min(5),
+  description: z.string().min(3),
   cost: z.string(), // Weird form thing going on here
   category: z.string(),
 }).strict();
@@ -33,7 +34,7 @@ interface PurchaseFormProps {
 export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
   const { toast } = useToast();
 
-  const { data: categoryData, loading } = useQuery(GetCategoriesDocument);
+  const { categories, loading } = useGetCategories();
 
   const [createPurchase] = useMutation(CreatePurchaseDocument, {
     refetchQueries: [GetPurchasesDocument, GetMostRecentPurchaseDocument],
@@ -110,7 +111,7 @@ export function PurchseForm({ previousTotal }: Readonly<PurchaseFormProps>) {
               </FormItem>
             )} />
           <ItemSelect 
-            items={categoryData?.categories ?? []}
+            items={categories}
             control={form.control}
             loading={loading}
           />

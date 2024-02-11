@@ -1,0 +1,1 @@
+export const LETTERBOXD_ENDPOINT="https://api.letterboxd.com/api/v0/";

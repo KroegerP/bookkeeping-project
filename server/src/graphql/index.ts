@@ -1,7 +1,7 @@
 import type { Context } from ".keystone/types";
 import { graphql } from "@keystone-6/core";
 
-import { OrderDirection } from "../generated/graphql";
+import { OrderDirection } from "../../generated/graphql";
 
 
 

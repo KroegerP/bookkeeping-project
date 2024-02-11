@@ -47,6 +47,14 @@ mutation CreatePurchase($data: PurchaseCreateInput!) {
   }
 }
 
+mutation UpdatePurchase($where: PurchaseWhereUniqueInput!, $data: PurchaseUpdateInput!) {
+  updatePurchase(where: $where, data: $data) {
+    id
+    description
+    date
+  }
+}
+
 mutation DeletePurchase($where: PurchaseWhereUniqueInput!) {
   deletePurchase(where: $where) {
     id

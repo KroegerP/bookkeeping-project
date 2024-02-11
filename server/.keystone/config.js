@@ -59,7 +59,57 @@ var session = (0, import_session.statelessSessions)({
   secret: sessionSecret
 });
 
-// graphql/index.ts
+// src/express/index.ts
+var import_express2 = require("express");
+
+// src/express/api/index.ts
+var import_express = require("express");
+
+// src/express/api/ping.ts
+async function postPing(req, res) {
+  const { context } = req;
+  const data = await context.db.User.findOne({
+    where: {
+      id: "1"
+    }
+  });
+  if (data) {
+    res.json(data.name);
+  } else {
+    res.json("Pong");
+  }
+}
+
+// src/express/utils.ts
+function makeContextMiddleware(context) {
+  const middleware = async (req, res, next) => {
+    req.context = await context.withRequest(req, res);
+    next();
+  };
+  return middleware;
+}
+function asyncMiddleware(fn) {
+  return (req, res, next) => {
+    fn(req, res, next).catch(next);
+  };
+}
+
+// src/express/api/index.ts
+async function createApiRouter() {
+  const apiRouter = (0, import_express.Router)();
+  apiRouter.post("/ping", asyncMiddleware(postPing));
+  return apiRouter;
+}
+
+// src/express/index.ts
+async function extendExpressApp(app, context) {
+  app.use((0, import_express2.json)());
+  app.get("/status", (_, res) => res.send("Ready"));
+  const apiRouter = await createApiRouter();
+  app.use("/api", makeContextMiddleware(context), apiRouter);
+}
+
+// src/graphql/index.ts
 var import_core = require("@keystone-6/core");
 function sortItems(a, b) {
   if (a.createdAt === b.createdAt || !a.createdAt || !b.createdAt) {
@@ -94,12 +144,12 @@ var extendGraphqlSchema = import_core.graphql.extend((base) => {
   };
 });
 
-// schema/card.ts
+// src/schema/card.ts
 var import_core2 = require("@keystone-6/core");
 var import_access = require("@keystone-6/core/access");
 var import_fields = require("@keystone-6/core/fields");
 
-// schema/utils/index.ts
+// src/schema/utils/index.ts
 function makeNonNullRef() {
   return {
     graphql: {
@@ -112,7 +162,7 @@ function makeNonNullRef() {
   };
 }
 
-// schema/card.ts
+// src/schema/card.ts
 var Card = (0, import_core2.list)({
   access: import_access.allowAll,
   fields: {
@@ -132,7 +182,7 @@ var Card = (0, import_core2.list)({
   }
 });
 
-// schema/category.ts
+// src/schema/category.ts
 var import_core3 = require("@keystone-6/core");
 var import_access2 = require("@keystone-6/core/access");
 var import_fields2 = require("@keystone-6/core/fields");
@@ -149,7 +199,7 @@ var Category = (0, import_core3.list)({
   }
 });
 
-// schema/purchase.ts
+// src/schema/purchase.ts
 var import_core4 = require("@keystone-6/core");
 var import_access3 = require("@keystone-6/core/access");
 var import_fields3 = require("@keystone-6/core/fields");
@@ -191,7 +241,7 @@ var Purchase = (0, import_core4.list)({
   }
 });
 
-// schema/user.ts
+// src/schema/user.ts
 var import_core5 = require("@keystone-6/core");
 var import_access4 = require("@keystone-6/core/access");
 var import_fields4 = require("@keystone-6/core/fields");
@@ -221,7 +271,7 @@ var User = (0, import_core5.list)({
   }
 });
 
-// schema/index.ts
+// src/schema/index.ts
 var lists = {
   User,
   Purchase,
@@ -237,8 +287,6 @@ var configuration = (0, import_core6.config)({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onConnect: async (context) => {
     },
-    // Optional advanced configuration
-    enableLogging: true,
     idField: { kind: "autoincrement" },
     shadowDatabaseUrl: "postgres://postgres:test@localhost:5432/shadowdb"
   },
@@ -246,7 +294,8 @@ var configuration = (0, import_core6.config)({
   session,
   server: {
     port: 5e3,
-    cors: { origin: ["http://localhost:3000"], credentials: true }
+    cors: { origin: "*" },
+    extendExpressApp
   },
   extendGraphqlSchema
 });

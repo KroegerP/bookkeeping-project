@@ -5,13 +5,14 @@
   "compilerOptions": {
     "target": "esnext",
     "types": ["node"],
-    "module": "CommonJS",
+    "module": "commonjs",
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
-  "include": ["./**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["**/node_modules/**/*"]
 }

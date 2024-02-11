@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 
 import { TableActions } from "./actions";
-import type { PurchaseBasicFragment } from "@/generated/graphql";
+import type { Category, PurchaseBasicFragment } from "@/generated/graphql";
 
 
 
@@ -25,18 +25,28 @@ export const columns: ColumnDef<PurchaseBasicFragment>[] = [
       );
     },
   },
+  // {
+  //   accessorKey: "total",
+  //   header: "Total",
+  //   size: 150,
+  //   cell: (cellProps) => {
+  //     const total: string | undefined = cellProps.row.getValue("total");
+
+  //     return (
+  //       <div className={`${total?.toString().startsWith("-") ? "text-red-800 dark:text-red-400" : "text-green-700 dark:text-green-400"}`}>
+  //         {total}
+  //       </div>
+  //     );
+  //   },
+  // },
   {
-    accessorKey: "total",
-    header: "Total",
+    accessorKey: "category",
+    header: "Category",
     size: 150,
     cell: (cellProps) => {
-      const total: string | undefined = cellProps.row.getValue("total");
+      const category: Category | undefined = cellProps.row.getValue("category");
 
-      return (
-        <div className={`${total?.toString().startsWith("-") ? "text-red-800 dark:text-red-400" : "text-green-700 dark:text-green-400"}`}>
-          {total}
-        </div>
-      );
+      return category?.name ?? "Unknown";
     },
   },
   {
